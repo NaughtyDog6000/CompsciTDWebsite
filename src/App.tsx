@@ -1,8 +1,8 @@
 import {
   Routes,
   Route,
-  redirect,
-  Navigate,
+  // redirect,
+  // Navigate,
   BrowserRouter,
 } from "react-router-dom";
 

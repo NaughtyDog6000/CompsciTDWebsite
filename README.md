@@ -1,3 +1,5 @@
+## This is going to be a re-write of the website using tailwind and Typescript with Vite as the build and dev tooling
+
 # Tools
 
 - Vite
