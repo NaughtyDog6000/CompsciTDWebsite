@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet";
+import { Navbar } from "@/components/NavBar";
 export default function HomePage() {
   return (
     <>
