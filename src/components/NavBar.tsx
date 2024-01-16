@@ -1,19 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
 export function NavBar({
   IsSignedIn = false,
   IsAdmin = false,
   IsDevmode = false,
-  SetSignoutDialog
+  SetSignoutDialog,
 }): JSX.Element {
   const navigate = useNavigate();
 
@@ -46,10 +47,7 @@ export function NavBar({
   return (
     <>
       <nav className="flex flex-col items-stretch justify-evenly bg-gray-800 p-6 md:h-16 md:flex-row md:p-1 ">
-        <img
-          src="../../src/assets/react.svg"
-          className="w-screen md:w-auto"
-        />
+        <img src="../../src/assets/react.svg" className="w-screen md:w-auto" />
 
         <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row justify-evenly">
           {Links.map((link, index) => (
@@ -64,16 +62,51 @@ export function NavBar({
         {/* the right side profile and settings dropdown */}
         <div className="flex items-center h-full w-full md:w-auto">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild><Button variant={"default"}>Menu</Button></DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"default"}>
+                <HamburgerMenuIcon />
+              </Button>
+            </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>Menu</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => {navigate("/Profile")}}>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Friends</DropdownMenuItem>              
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  console.log("change theme");
+                }}
+              >
+                Toggle Theme
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => {SetSignoutDialog(true)}}><span className="font-bold">Signout</span></DropdownMenuItem>
-              
+              <DropdownMenuItem
+                onSelect={() => {
+                  navigate("/Profile");
+                }}
+              >
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {
+                  navigate("/Friends");
+                }}
+              >
+                Friends
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {
+                  navigate("/Settings");
+                }}
+              >
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={() => {
+                  SetSignoutDialog(true);
+                }}
+              >
+                <span className="font-bold">Signout</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
