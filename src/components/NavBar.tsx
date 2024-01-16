@@ -1,10 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
-export default function Navbar(
-  IsSignedIn: boolean,
-  IsAdmin: boolean,
-  IsDevmode: boolean
-): JSX.Element {
+export function NavBar({
+  IsSignedIn = false,
+  IsAdmin = false,
+  IsDevmode = false,
+  SetSignoutDialog
+}): JSX.Element {
+  const navigate = useNavigate();
+
   // these links will always be in the NavBar regardless of user state
   const NavbarLinks = [
     { url: "/", name: "Home" },
@@ -14,8 +26,7 @@ export default function Navbar(
   // if the user is signed in add these links to their navbar
   const SignedInLinks = [
     { url: "/Profile", name: "Profile" },
-    { url: "/Settings", name: "Settings" },
-    { url: "/Signout", name: "Signout" },
+    { url: "/Friends", name: "Friends" },
   ];
 
   // if the user is signed out add these links to their navbar
@@ -35,24 +46,36 @@ export default function Navbar(
   return (
     <>
       <nav className="flex flex-col items-stretch justify-evenly bg-gray-800 p-6 md:h-16 md:flex-row md:p-1 ">
-        <image
-          href="../../src/assets/react.svg"
+        <img
+          src="../../src/assets/react.svg"
           className="w-screen md:w-auto"
         />
 
-        <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row md:justify-evenly">
+        <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row justify-evenly">
           {Links.map((link, index) => (
-            <li className="w-full bg-gray-500 md:w-auto ">
-              <a key={index}>
+            <li key={index} className="flex justify-evenly w-full md:w-auto ">
+              <Button asChild>
                 <Link to={link.url}>{link.name}</Link>
-              </a>
+              </Button>
             </li>
           ))}
         </ul>
 
         {/* the right side profile and settings dropdown */}
-        <div className=" h-full w-auto bg-black">
-          <image></image>
+        <div className="flex items-center h-full w-full md:w-auto">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild><Button variant={"default"}>Menu</Button></DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Menu</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={() => {navigate("/Profile")}}>Profile</DropdownMenuItem>
+              <DropdownMenuItem>Friends</DropdownMenuItem>              
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={() => {SetSignoutDialog(true)}}><span className="font-bold">Signout</span></DropdownMenuItem>
+              
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </nav>
     </>
