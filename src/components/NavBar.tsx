@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import {
   DropdownMenu,
@@ -10,44 +10,57 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
+type NavbarLink = {
+  url: string;
+  name: string;
+  variant: unknown;
+};
+
 export function NavBar({
   IsSignedIn = false,
   IsAdmin = false,
-  IsDevmode = false,
+  IsDebugmode = false,
   SetSignoutDialog,
 }: {
   IsSignedIn: boolean;
   IsAdmin: boolean;
-  IsDevmode: boolean;
-  SetSignoutDialog: any;
+  IsDebugmode: boolean;
+  SetSignoutDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
   const navigate = useNavigate();
 
   // these links will always be in the NavBar regardless of user state
-  const NavbarLinks = [
-    { url: "/", name: "Home" },
-    { url: "/Leaderboard", name: "Leaderboard" },
+  const NavbarLinks: NavbarLink[] = [
+    { url: "/", name: "Home", variant: "default" },
+    { url: "/Leaderboard", name: "Leaderboard", variant: "default" },
   ];
 
   // if the user is signed in add these links to their navbar
-  const SignedInLinks = [
-    { url: "/Profile", name: "Profile" },
-    { url: "/Friends", name: "Friends" },
+  const SignedInLinks: NavbarLink[] = [
+    { url: "/Profile", name: "Profile", variant: "default" },
+    { url: "/Friends", name: "Friends", variant: "default" },
   ];
 
   // if the user is signed out add these links to their navbar
-  const SignedOutLinks = [
-    { url: "/Signin", name: "Signin" },
-    { url: "/Signup", name: "Signup" },
+  const SignedOutLinks: NavbarLink[] = [
+    { url: "/Signin", name: "Signin", variant: "default" },
+    { url: "/Signup", name: "Signup", variant: "default" },
   ];
 
+  // if the user is an admin, present the admin dashboard page
+  const AdminLinks: NavbarLink[] = [
+    { url: "/Admin", name: "Admin Pages", variant: "destructive" },
+  ];
   // if in DevMode, add DebugPage to the list of links
-  const DevModeLinks = [{ url: "/Admin/Debug", name: "Debug" }];
+  const DebugModeLinks: NavbarLink[] = [
+    { url: "/Debug", name: "Debug", variant: "destructive" },
+  ];
 
   const Links = [];
   Links.push(...NavbarLinks); // add the default, always included links to the list
   Links.push(...(IsSignedIn ? SignedInLinks : SignedOutLinks)); // add signed in links or signed out links
-  if (IsDevmode) Links.push(...DevModeLinks); // if in dev mode include the Debug page links etc
+  if (IsDebugmode) Links.push(...DebugModeLinks); // if in dev mode include the Debug page links etc
+  if (IsAdmin) Links.push(...AdminLinks); // if the user is an admin include the link to the admin pages
 
   return (
     <>
@@ -57,7 +70,7 @@ export function NavBar({
         <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row md:justify-evenly">
           {Links.map((link, index) => (
             <li key={index} className="w-full md:w-auto ">
-              <Button asChild>
+              <Button variant={link.variant} asChild>
                 <Link to={link.url}>{link.name}</Link>
               </Button>
             </li>
@@ -66,60 +79,55 @@ export function NavBar({
 
         {/* the right side profile and settings dropdown */}
         <div className="flex items-center h-full w-full md:w-auto pr-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"default"}>
-                <HamburgerMenuIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <HamburgerMenuContent
-                IsSignedIn={IsSignedIn}
-                navigate={navigate}
-                SetSignoutDialog={SetSignoutDialog}
-              />
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {IsSignedIn && (
+            <HamburgerMenu
+              navigate={navigate}
+              SetSignoutDialog={SetSignoutDialog}
+            />
+          )}
         </div>
       </nav>
     </>
   );
 }
 
-function HamburgerMenuContent({
-  IsSignedIn,
+function HamburgerMenu({
   navigate,
   SetSignoutDialog,
 }: {
-  IsSignedIn: boolean;
-  navigate: any;
-  SetSignoutDialog: any;
+  navigate: NavigateFunction;
+  SetSignoutDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
-  if (IsSignedIn)
-    return (
-      <>
-        <DropdownMenuLabel>Menu</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {/* conditionally add the menu items for signed in or signout views */}
-        <DropdownMenuItem
-          onSelect={() => {
-            navigate("/Profile");
-          }}
-        >
-          Profile
-        </DropdownMenuItem>
-        <DropdownMenuItem>Friends</DropdownMenuItem>
-        <DropdownMenuItem>Settings</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={() => {
-            SetSignoutDialog(true);
-          }}
-        >
-          <span className="font-bold">Signout</span>
-        </DropdownMenuItem>
-      </>
-    );
-
-  return <></>;
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"default"}>
+            <HamburgerMenuIcon />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>{"username"}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onSelect={() => {
+              navigate("/Profile");
+            }}
+          >
+            Profile
+          </DropdownMenuItem>
+          <DropdownMenuItem>Friends</DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onSelect={() => {
+              SetSignoutDialog(true);
+            }}
+          >
+            <span className="font-bold">Signout</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
+  );
 }

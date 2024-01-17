@@ -10,6 +10,10 @@
 
 # React + TypeScript + Vite
 
+## todo/to look into:
+
+Redux / usecontext / use reducer (for state managment)
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
