@@ -13,7 +13,12 @@ export default function HomePage() {
         <title>Home</title>
       </Helmet>
 
-      <NavBar SetSignoutDialog={SetSignoutDialogOpen} />
+      <NavBar
+        IsSignedIn={true}
+        IsAdmin={false}
+        IsDevmode={false}
+        SetSignoutDialog={SetSignoutDialogOpen}
+      />
 
       <SignoutDialog open={SignoutDialogOpen} setOpen={SetSignoutDialogOpen} />
 
