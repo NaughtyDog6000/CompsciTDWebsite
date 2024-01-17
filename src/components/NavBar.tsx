@@ -1,21 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
-export function NavBar({
-  IsSignedIn = false,
-  IsAdmin = false,
-  IsDevmode = false,
-  SetSignoutDialog,
-}): JSX.Element {
+export function NavBar(
+  IsSignedIn: boolean = false,
+  IsAdmin: boolean = false,
+  IsDevmode: boolean = false,
+  SetSignoutDialog: any
+): JSX.Element {
   const navigate = useNavigate();
 
   // these links will always be in the NavBar regardless of user state
@@ -47,11 +46,14 @@ export function NavBar({
   return (
     <>
       <nav className="flex flex-col items-stretch justify-evenly bg-gray-800 p-6 md:h-16 md:flex-row md:p-1 ">
-        <img src="../../src/assets/react.svg" className="w-screen md:w-auto" />
+        <img
+          src="../../src/assets/react.svg"
+          className="w-screen md:w-auto"
+        />
 
-        <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row justify-evenly">
+        <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row md:justify-evenly">
           {Links.map((link, index) => (
-            <li key={index} className="flex justify-evenly w-full md:w-auto ">
+            <li key={index} className="w-full md:w-auto ">
               <Button asChild>
                 <Link to={link.url}>{link.name}</Link>
               </Button>
@@ -62,51 +64,16 @@ export function NavBar({
         {/* the right side profile and settings dropdown */}
         <div className="flex items-center h-full w-full md:w-auto">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"default"}>
-                <HamburgerMenuIcon />
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild><Button variant={"default"}>Menu</Button></DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>Menu</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => {
-                  console.log("change theme");
-                }}
-              >
-                Toggle Theme
-              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => {navigate("/Profile")}}>Profile</DropdownMenuItem>
+              <DropdownMenuItem>Friends</DropdownMenuItem>              
+              <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={() => {
-                  navigate("/Profile");
-                }}
-              >
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => {
-                  navigate("/Friends");
-                }}
-              >
-                Friends
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => {
-                  navigate("/Settings");
-                }}
-              >
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={() => {
-                  SetSignoutDialog(true);
-                }}
-              >
-                <span className="font-bold">Signout</span>
-              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => {SetSignoutDialog(true)}}><span className="font-bold">Signout</span></DropdownMenuItem>
+              
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
