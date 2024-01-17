@@ -8,6 +8,7 @@ import {
 
 import Page404 from "./Pages/Page404";
 import HomePage from "./Pages/HomePage";
+import Leaderboard from "./Pages/LeaderboardPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="*" element={<Page404 />} />
         <Route path="/" element={<HomePage />} />
+        <Route path="/Leaderboard" element={<Leaderboard />} />
       </Routes>
     </BrowserRouter>
   );
