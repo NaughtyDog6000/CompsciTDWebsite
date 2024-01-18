@@ -70,6 +70,7 @@ export function NavBar({
         <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row md:justify-evenly">
           {Links.map((link, index) => (
             <li key={index} className="w-full md:w-auto ">
+              {/* @ts-ignore */}
               <Button variant={link.variant} asChild>
                 <Link to={link.url}>{link.name}</Link>
               </Button>

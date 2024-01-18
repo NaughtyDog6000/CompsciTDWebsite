@@ -32,7 +32,7 @@ export default function Leaderboard() {
         <title>Leaderboard | compsci </title>
       </Helmet>
 
-      <NavBar IsSignedIn={false} IsAdmin={false} IsDebugmode={false} SetSignoutDialog={SetSignoutDialogOpen} />
+      <NavBar IsSignedIn={IsSignedIn} IsAdmin={false} IsDebugmode={false} SetSignoutDialog={SetSignoutDialogOpen} />
 
       <SignoutDialog open={SignoutDialogOpen} setOpen={SetSignoutDialogOpen} setIsSignedIn={SetIsSignedIn} />
 
