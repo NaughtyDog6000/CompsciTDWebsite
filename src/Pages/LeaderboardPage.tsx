@@ -41,7 +41,7 @@ export default function Leaderboard() {
       <h2>PANEL</h2>
       <Sheet>
         <SheetTrigger asChild>
-          <Button>Open Filters</Button>
+          <Button onClick={() => {setControlPanelEnabled(!controlPanelEnabled)}}>Open Filters</Button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
@@ -68,7 +68,7 @@ export default function Leaderboard() {
             <Button variant={"default"}>Apply</Button>
             <Button variant={"destructive"}>Reset</Button>
             <SheetClose asChild>
-              <Button variant={"outline"}>Close</Button>
+              <Button variant={"outline"} onClick={() => {setControlPanelEnabled(false)}}>Close</Button>
             </SheetClose>
           </SheetFooter>
         </SheetContent>

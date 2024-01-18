@@ -1,8 +1,6 @@
 import {
   Routes,
   Route,
-  redirect,
-  Navigate,
   BrowserRouter,
 } from "react-router-dom";
 
