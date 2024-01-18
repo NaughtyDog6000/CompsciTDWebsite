@@ -32,16 +32,30 @@ export default function Leaderboard() {
         <title>Leaderboard | compsci </title>
       </Helmet>
 
-      <NavBar IsSignedIn={IsSignedIn} IsAdmin={false} IsDebugmode={false} SetSignoutDialog={SetSignoutDialogOpen} />
+      <NavBar
+        IsSignedIn={IsSignedIn}
+        IsAdmin={false}
+        IsDebugmode={false}
+        SetSignoutDialog={SetSignoutDialogOpen}
+      />
 
-      <SignoutDialog open={SignoutDialogOpen} setOpen={SetSignoutDialogOpen} setIsSignedIn={SetIsSignedIn} />
+      <SignoutDialog
+        open={SignoutDialogOpen}
+        setOpen={SetSignoutDialogOpen}
+        setIsSignedIn={SetIsSignedIn}
+      />
 
-      <h1>Leaderboard Page</h1>
+      <h1 className="h-auto text-8xl font-bold mb-2 mt-4">Leaderboard Page</h1>
 
-      <h2>PANEL</h2>
       <Sheet>
         <SheetTrigger asChild>
-          <Button onClick={() => {setControlPanelEnabled(!controlPanelEnabled)}}>Open Filters</Button>
+          <Button
+            onClick={() => {
+              setControlPanelEnabled(!controlPanelEnabled);
+            }}
+          >
+            Open Filters
+          </Button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
@@ -68,7 +82,14 @@ export default function Leaderboard() {
             <Button variant={"default"}>Apply</Button>
             <Button variant={"destructive"}>Reset</Button>
             <SheetClose asChild>
-              <Button variant={"outline"} onClick={() => {setControlPanelEnabled(false)}}>Close</Button>
+              <Button
+                variant={"outline"}
+                onClick={() => {
+                  setControlPanelEnabled(false);
+                }}
+              >
+                Close
+              </Button>
             </SheetClose>
           </SheetFooter>
         </SheetContent>
