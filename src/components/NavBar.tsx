@@ -9,6 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import Logo from "@/assets/react.svg";
+
 
 type NavbarLink = {
   url: string;
@@ -65,7 +67,7 @@ export function NavBar({
   return (
     <>
       <nav className="flex flex-col items-stretch justify-evenly bg-gray-800 p-6 md:h-12 md:flex-row md:p-1 ">
-        <img src="../../src/assets/react.svg" className="w-screen md:w-auto" />
+        <img src={Logo} className="w-screen md:w-auto" />
 
         <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row md:justify-evenly">
           {Links.map((link, index) => (
