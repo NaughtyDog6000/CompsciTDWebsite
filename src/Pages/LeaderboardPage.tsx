@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { NavBar } from "@/components/NavBar";
 import { Button } from "@/components/ui/button";
+import { SignoutDialog } from "@/components/Signout";
 import {
   Sheet,
   SheetContent,
@@ -22,12 +23,18 @@ import {
 
 export default function Leaderboard() {
   const [controlPanelEnabled, setControlPanelEnabled] = useState(false);
+  const [SignoutDialogOpen, SetSignoutDialogOpen] = useState(false);
+  const [IsSignedIn, SetIsSignedIn] = useState(false);
 
   return (
     <>
       <Helmet>
         <title>Leaderboard | compsci </title>
       </Helmet>
+
+      <NavBar IsSignedIn={false} IsAdmin={false} IsDebugmode={false} SetSignoutDialog={SetSignoutDialogOpen} />
+
+      <SignoutDialog open={SignoutDialogOpen} setOpen={SetSignoutDialogOpen} setIsSignedIn={SetIsSignedIn} />
 
       <h1>Leaderboard Page</h1>
 
