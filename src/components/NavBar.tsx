@@ -1,5 +1,6 @@
-import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { AppContext } from "@/App";
+import Logo from "@/assets/react.svg";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,9 +9,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import Logo from "@/assets/react.svg";
-
+import { UserTypeEnum, useAppState } from "@/types/State";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 
 type NavbarLink = {
   url: string;
@@ -19,17 +20,12 @@ type NavbarLink = {
 };
 
 export function NavBar({
-  IsSignedIn = false,
-  IsAdmin = false,
-  IsDebugmode = false,
   SetSignoutDialog,
 }: {
-  IsSignedIn: boolean;
-  IsAdmin: boolean;
-  IsDebugmode: boolean;
   SetSignoutDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
   const navigate = useNavigate();
+  const { AppState, SetAppState } = useAppState();
 
   // these links will always be in the NavBar regardless of user state
   const NavbarLinks: NavbarLink[] = [
@@ -60,9 +56,33 @@ export function NavBar({
 
   const Links = [];
   Links.push(...NavbarLinks); // add the default, always included links to the list
-  Links.push(...(IsSignedIn ? SignedInLinks : SignedOutLinks)); // add signed in links or signed out links
-  if (IsDebugmode) Links.push(...DebugModeLinks); // if in dev mode include the Debug page links etc
-  if (IsAdmin) Links.push(...AdminLinks); // if the user is an admin include the link to the admin pages
+
+  // level of authority based additions by navbar.
+  if (AppState.userType >= UserTypeEnum.User) Links.push(...SignedInLinks);
+
+  // role based links to the navbar.
+  switch (AppState.userType) {
+    case UserTypeEnum.SignedOut:
+      Links.push(...SignedOutLinks);
+      break;
+    case UserTypeEnum.User:
+      break;
+    case UserTypeEnum.Moderator:
+      Links.push(...DebugModeLinks);
+      break;
+    case UserTypeEnum.Admin:
+      Links.push(...DebugModeLinks);
+      Links.push(...AdminLinks);
+      break;
+    default:
+      console.error(
+        "switch on userType in NavBar defaulted (all cases shouuld be handled)"
+      );
+      break;
+  }
+
+  // add signed in links or signed out links
+  if (AppState.DebugMode) Links.push(...DebugModeLinks); // if in dev mode include the Debug page links etc
 
   return (
     <>

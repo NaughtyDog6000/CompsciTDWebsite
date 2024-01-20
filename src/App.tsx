@@ -7,17 +7,18 @@ import HomePage from "./Pages/HomePage";
 import Leaderboard from "./Pages/LeaderboardPage";
 import DebugPage from "./Pages/Debug";
 
-const AppContext = createContext<AppContextProps | undefined>(undefined);
+export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
+  DebugMode: false,
   username: null,
   userType: UserTypeEnum.User,
   useDarkmode: true,
 };
 
 function App() {
-  const [state, setState] = useState<AppState | null>(defaultAppState);
+  const [AppState, SetAppState] = useState<AppState>(defaultAppState);
   return (
-    <AppContext.Provider value={{ state, setState }}>
+    <AppContext.Provider value={{ AppState, SetAppState }}>
       <BrowserRouter>
         <Routes>
           <Route path="*" element={<Page404 />} />
