@@ -3,12 +3,14 @@ import { Helmet } from "react-helmet";
 import { NavBar } from "@/components/NavBar";
 import { SignoutDialog } from "@/components/Signout";
 import { useState } from "react";
+import { UserTypeEnum, useAppState } from "@/types/State";
 
 export default function HomePage() {
   const [SignoutDialogOpen, SetSignoutDialogOpen] = useState(false);
   const [IsSignedIn, SetIsSignedIn] = useState(false);
   const [IsAdmin, SetIsAdmin] = useState(false);
   const [DebugMode, SetDebugMode] = useState(false);
+  const { AppState, SetAppState } = useAppState();
 
   return (
     <>
@@ -60,6 +62,29 @@ export default function HomePage() {
             }}
           >
             Toggle DebugMode
+          </Button>
+
+          <Button
+            className="mb-1"
+            onClick={() => {
+              console.log(JSON.stringify(AppState));
+            }}
+          >
+            LOG APP STATE
+          </Button>
+
+          <Button
+            className="mb-1"
+            onClick={() => {
+              SetAppState({
+                DebugMode: true,
+                useDarkmode: true,
+                username: "bbno$",
+                userType: UserTypeEnum.Admin,
+              });
+            }}
+          >
+            SET ADMIN
           </Button>
         </div>
       </div>

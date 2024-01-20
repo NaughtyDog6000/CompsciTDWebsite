@@ -102,7 +102,7 @@ export function NavBar({
 
         {/* the right side profile and settings dropdown */}
         <div className="flex items-center h-full w-full md:w-auto pr-2">
-          {IsSignedIn && (
+          {AppState.userType >= UserTypeEnum.User && (
             <HamburgerMenu
               navigate={navigate}
               SetSignoutDialog={SetSignoutDialog}
