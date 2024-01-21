@@ -1,4 +1,3 @@
-import { AppContext } from "@/App";
 import Logo from "@/assets/react.svg";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,21 +8,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserTypeEnum, useAppState } from "@/types/State";
+import { UserTypeEnum, useAppState } from "@/Structs/State";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-
+import { Switch } from "@/components/ui/switch";
 type NavbarLink = {
   url: string;
   name: string;
   variant: unknown;
 };
 
-export function NavBar({
-  SetSignoutDialog,
-}: {
-  SetSignoutDialog: React.Dispatch<React.SetStateAction<boolean>>;
-}): JSX.Element {
+export function NavBar(): JSX.Element {
   const navigate = useNavigate();
   const { AppState, SetAppState } = useAppState();
 
@@ -92,7 +87,7 @@ export function NavBar({
         <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row md:justify-evenly">
           {Links.map((link, index) => (
             <li key={index} className="w-full md:w-auto ">
-              {/* @ts-ignore */}
+              {/* @ts-expect-error variant is an auto-generated type that I cant import but should not result in any errors. */}
               <Button variant={link.variant} asChild>
                 <Link to={link.url}>{link.name}</Link>
               </Button>
@@ -100,13 +95,17 @@ export function NavBar({
           ))}
         </ul>
 
-        {/* the right side profile and settings dropdown */}
-        <div className="flex items-center h-full w-full md:w-auto pr-2">
+        {/* add the right side profile and settings dropdown if the user is signed in */}
+        <div className="flex items-center h-full w-full md:w-auto pr-0.5">
+          <Switch
+            className="data-[state=checked]:bg-white data-[state=unchecked]:bg-slate-600 m-2"
+            onCheckedChange={(checked: boolean) => {
+              SetAppState({ ...AppState, useDarkmode: checked });
+            }}
+            defaultChecked={AppState.useDarkmode}
+          />
           {AppState.userType >= UserTypeEnum.User && (
-            <HamburgerMenu
-              navigate={navigate}
-              SetSignoutDialog={SetSignoutDialog}
-            />
+            <HamburgerMenu navigate={navigate} />
           )}
         </div>
       </nav>
@@ -116,11 +115,11 @@ export function NavBar({
 
 function HamburgerMenu({
   navigate,
-  SetSignoutDialog,
 }: {
   navigate: NavigateFunction;
-  SetSignoutDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
+  const { AppState, SetAppState } = useAppState();
+
   return (
     <>
       <DropdownMenu>
@@ -144,7 +143,7 @@ function HamburgerMenu({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onSelect={() => {
-              SetSignoutDialog(true);
+              SetAppState({ ...AppState, SignoutDialogOpen: true });
             }}
           >
             <span className="font-bold">Signout</span>

@@ -6,6 +6,7 @@ export type AppState = {
   userType: UserTypeEnum;
   DebugMode: boolean;
   useDarkmode: boolean;
+  SignoutDialogOpen: boolean;
 };
 
 export const enum UserTypeEnum {

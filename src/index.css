@@ -40,6 +40,8 @@
   }
 
   .dark {
+    background-color: rgb(35, 35, 35);
+
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -77,4 +79,16 @@
   body {
     @apply text-foreground;
   }
+}
+
+.rdp [aria-hidden="true"] {
+  @apply hidden;
+}
+
+.rdp-vhidden {
+  @apply hidden;
+}
+
+select::-webkit-scrollbar {
+  display: none;
 }

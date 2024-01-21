@@ -6,19 +6,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { UserTypeEnum, useAppState } from "@/Structs/State";
 
-export function SignoutDialog({
-  open,
-  setOpen,
-  setIsSignedIn,
-}: {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export function SignoutDialog() {
+  const { AppState, SetAppState } = useAppState();
+
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={AppState.SignoutDialogOpen}
+        onOpenChange={(open: boolean) => {
+          SetAppState({ ...AppState, SignoutDialogOpen: open });
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Signout Options</DialogTitle>
@@ -32,9 +32,12 @@ export function SignoutDialog({
             <Button
               id="signout-single"
               onClick={() => {
-                setIsSignedIn(false);
                 console.warn("actual signout not completed");
-                setOpen(false);
+                SetAppState({
+                  ...AppState,
+                  SignoutDialogOpen: false,
+                  userType: UserTypeEnum.SignedOut,
+                });
               }}
             >
               Signout
@@ -46,9 +49,12 @@ export function SignoutDialog({
               id="signout-all"
               variant="destructive"
               onClick={() => {
-                setIsSignedIn(false);
                 console.warn("actual signout not completed");
-                setOpen(false);
+                SetAppState({
+                  ...AppState,
+                  SignoutDialogOpen: false,
+                  userType: UserTypeEnum.SignedOut,
+                });
               }}
             >
               Signout EVERYTHING
