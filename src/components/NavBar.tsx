@@ -87,7 +87,6 @@ export function NavBar(): JSX.Element {
         <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row md:justify-evenly">
           {Links.map((link, index) => (
             <li key={index} className="w-full md:w-auto ">
-              {/* @ts-expect-error variant is an auto-generated type that I cant import but should not result in any errors. */}
               <Button variant={link.variant} asChild>
                 <Link to={link.url}>{link.name}</Link>
               </Button>
