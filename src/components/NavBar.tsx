@@ -63,10 +63,8 @@ export function NavBar(): JSX.Element {
     case UserTypeEnum.User:
       break;
     case UserTypeEnum.Moderator:
-      Links.push(...DebugModeLinks);
       break;
     case UserTypeEnum.Admin:
-      Links.push(...DebugModeLinks);
       Links.push(...AdminLinks);
       break;
     default:
