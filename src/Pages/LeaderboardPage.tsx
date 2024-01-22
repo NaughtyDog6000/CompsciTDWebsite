@@ -29,9 +29,7 @@ import {
 } from "@/Structs/LeaderboardState";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
-import { Calendar } from "@/components/ui/calendar";
 import {
-  DatePickerPreset,
   DatePickerWithPresets,
   defaultDatePickerPresets,
 } from "@/components/DatePickerWithPresets";
@@ -52,10 +50,13 @@ export default function Leaderboard() {
   const [leaderboardSettings, SetLeaderboardSettings] =
     useState<LeaderboardSettingsType>(DefaultLeaderboardSettings);
   // the temporary store of the values, before it is either reset or applied (moved to the leaderboard settings state)
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [tempLeaderboardSettings, SetTempLeaderboardSettings] = useState(
     DefaultLeaderboardSettings
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function ApplyLeaderboardSettings() {
     console.log("leaderboardsettings before: " + leaderboardSettings);
     SetLeaderboardSettings({
