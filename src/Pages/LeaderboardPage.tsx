@@ -51,21 +51,17 @@ export default function Leaderboard() {
     useState<LeaderboardSettingsType>(DefaultLeaderboardSettings);
   // the temporary store of the values, before it is either reset or applied (moved to the leaderboard settings state)
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [tempLeaderboardSettings, SetTempLeaderboardSettings] = useState(
-    DefaultLeaderboardSettings
-  );
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function ApplyLeaderboardSettings() {
-    console.log("leaderboardsettings before: " + leaderboardSettings);
-    SetLeaderboardSettings({
-      ...leaderboardSettings,
-      ...tempLeaderboardSettings,
-    });
-    console.log("leaderboard settings after: " + leaderboardSettings);
-  }
-
+  // const [tempLeaderboardSettings, SetTempLeaderboardSettings] = useState(
+  //   DefaultLeaderboardSettings
+  // );
+  // function ApplyLeaderboardSettings() {
+  //   console.log("leaderboardsettings before: " + leaderboardSettings);
+  //   SetLeaderboardSettings({
+  //     ...leaderboardSettings,
+  //     ...tempLeaderboardSettings,
+  //   });
+  //   console.log("leaderboard settings after: " + leaderboardSettings);
+  // }
   return (
     <>
       <Helmet>
