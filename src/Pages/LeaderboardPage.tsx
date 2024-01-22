@@ -33,6 +33,7 @@ import { Calendar } from "@/components/ui/calendar";
 import {
   DatePickerPreset,
   DatePickerWithPresets,
+  defaultDatePickerPresets,
 } from "@/components/DatePickerWithPresets";
 
 const DefaultLeaderboardSettings: LeaderboardSettingsType = {
@@ -45,12 +46,6 @@ const DefaultLeaderboardSettings: LeaderboardSettingsType = {
   Sort_by: SortByEnum.Score,
   sort_ascending: false,
 };
-
-const defaultDatePickerPresets: DatePickerPreset[] = [
-  { name: "last 24 hours", value: 1 },
-  { name: "last week", value: 7 },
-  { name: "last year", value: 365 },
-];
 
 export default function Leaderboard() {
   const [controlPanelEnabled, setControlPanelEnabled] = useState(true);
@@ -78,7 +73,9 @@ export default function Leaderboard() {
 
       <NavBar />
 
-      <h1 className="h-auto text-8xl font-bold mb-2 mt-4">Leaderboard Page</h1>
+      <h1 className="h-auto text-8xl font-bold mb-2 mt-4 break-words">
+        Leaderboard Page
+      </h1>
 
       <Sheet defaultOpen={controlPanelEnabled}>
         <SheetTrigger asChild>
@@ -121,19 +118,7 @@ export default function Leaderboard() {
               }}
             />
           </div>
-          {/* dropdown for number of records */}
-          <div className="my-2">
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Default" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="20">20</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+
           {/* radio buttons for visbility filter */}
           <Separator />
           <p className="flex justify-center text-lg font-bold">Visability</p>
@@ -159,14 +144,37 @@ export default function Leaderboard() {
               </div>
             </RadioGroup>
           </div>
+          {/* DatePickers for timeperiod of records allowed */}
           <Separator />
+          <p className="flex justify-center text-lg font-bold">Upload Range</p>
+
+          <p>AllTime / Custom Radio Buttons</p>
+
           <p>Uploaded Before: </p>
-          <div></div>
-          <Separator />
+          <div>
+            <DatePickerWithPresets CustomPresets={defaultDatePickerPresets} />
+          </div>
           <p>Uploaded After: </p>
           <div>
-            <DatePickerWithPresets Presets={defaultDatePickerPresets} />
+            <DatePickerWithPresets CustomPresets={defaultDatePickerPresets} />
           </div>
+
+          <Separator />
+          <p className="flex justify-center text-lg font-bold">Game Type</p>
+          {/* Game Mode Selector */}
+          <div className="my-2">
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="GameMode" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={GameModeEnum.Default}>Default</SelectItem>
+                <SelectItem value={GameModeEnum.Hardcore}>HardCore</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* END OF ITEMS */}
           <SheetFooter>
             <Button variant={"default"}>Apply</Button>
             <Button variant={"destructive"}>Reset</Button>

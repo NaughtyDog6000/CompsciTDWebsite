@@ -1,4 +1,4 @@
-import Logo from "@/assets/react.svg";
+import Logo from "@/assets/Robco-Logo-No-BG-Black.svg";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -82,7 +82,9 @@ export function NavBar(): JSX.Element {
   return (
     <>
       <nav className="flex flex-col items-stretch justify-evenly bg-gray-800 p-6 md:h-12 md:flex-row md:p-1 ">
-        <img src={Logo} className="w-screen md:w-auto" />
+        <div className="flex items-center justify-center">
+          <img src={Logo} className="w-4/6 md:w-auto max-h-32" />
+        </div>
 
         <ul className="flex grow flex-col items-center justify-start gap-2 md:flex-row md:justify-evenly">
           {Links.map((link, index) => (
@@ -96,7 +98,7 @@ export function NavBar(): JSX.Element {
         </ul>
 
         {/* add the right side profile and settings dropdown if the user is signed in */}
-        <div className="flex items-center h-full w-full md:w-auto pr-0.5">
+        <div className="flex justify-end items-center h-full w-full md:w-auto pr-0.5">
           <Switch
             className="data-[state=checked]:bg-white data-[state=unchecked]:bg-slate-600 m-2"
             onCheckedChange={(checked: boolean) => {

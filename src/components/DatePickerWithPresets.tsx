@@ -25,13 +25,20 @@ export type DatePickerPreset = {
   value: number;
 };
 export const defaultDatePickerPresets: DatePickerPreset[] = [
-  { name: "last 24 hours", value: 1 },
-  { name: "last week", value: 7 },
-  { name: "last year", value: 365 },
+  { name: "today", value: 0 },
+  { name: "last 24 hours", value: -1 },
+  { name: "last week", value: -7 },
+  { name: "last year", value: -365 },
 ];
 
-export function DatePickerWithPresets(Presets: DatePickerPreset[]) {
+export function DatePickerWithPresets({
+  CustomPresets = defaultDatePickerPresets,
+}: {
+  CustomPresets: DatePickerPreset[];
+}): JSX.Element {
   const [date, setDate] = React.useState<Date>();
+  const Presets = [];
+  Presets.push(...CustomPresets);
 
   return (
     <Popover>
@@ -52,23 +59,25 @@ export function DatePickerWithPresets(Presets: DatePickerPreset[]) {
         className="flex w-auto flex-col space-y-2 p-2"
       >
         <Select
-          onValueChange={(value) =>
-            setDate(addDays(new Date(), parseInt(value)))
-          }
+          onValueChange={(value) => {
+            console.log(value);
+            const currentDate = new Date();
+            const newDate = new Date(currentDate);
+            const days = parseInt(value, 10);
+            newDate.setDate(currentDate.getDate() + days);
+            console.log(newDate);
+            setDate(newDate);
+          }}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select" />
           </SelectTrigger>
           <SelectContent position="popper">
-            {Presets.map((preset: DatePickerPreset) => (
+            {Presets.map((preset) => (
               <SelectItem value={preset.value.toString()}>
                 {preset.name}
               </SelectItem>
             ))}
-            <SelectItem value="0">Today</SelectItem>
-            <SelectItem value="1">Tomorrow</SelectItem>
-            <SelectItem value="3">In 3 days</SelectItem>
-            <SelectItem value="7">In a week</SelectItem>
           </SelectContent>
         </Select>
         <div className="rounded-md border">
