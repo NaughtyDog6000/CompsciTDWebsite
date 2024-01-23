@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { NavBar } from "@/components/NavBar";
-
+import { useAppState } from "@/Structs/State";
 export default function DebugPage() {
   const navigate = useNavigate();
+  const {AppState, SetAppState} = useAppState();
   return (
     <>
       <NavBar />
@@ -17,7 +18,15 @@ export default function DebugPage() {
         GO HOME
       </Button>
       <h1>DEBUGPAGE</h1>
-      <h2>testsiod</h2>
+
+        {
+          Object.entries(AppState).map((entry) => (
+            <p>
+              {entry[0]}: {entry[1]}
+            </p>
+          ))
+        }
+
     </>
   );
 }
