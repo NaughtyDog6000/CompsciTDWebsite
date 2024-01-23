@@ -9,6 +9,14 @@ export type AppState = {
   SignoutDialogOpen: boolean;
 };
 
+export const DefaultAppState: AppState = {
+  username: null,
+  userType: UserTypeEnum.SignedOut,
+  DebugMode: false,
+  useDarkmode: false,
+  SignoutDialogOpen: false
+}
+
 export const enum UserTypeEnum {
   SignedOut = 0,
   User = 1,

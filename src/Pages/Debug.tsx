@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { NavBar } from "@/components/NavBar";
-import { useAppState } from "@/Structs/State";
+import { DefaultAppState, useAppState } from "@/Structs/State";
 export default function DebugPage() {
-  const navigate = useNavigate();
   const {AppState, SetAppState} = useAppState();
   return (
     <>
@@ -12,10 +10,10 @@ export default function DebugPage() {
       <Button
         variant={"default"}
         onClick={() => {
-          navigate("/");
+          SetAppState(DefaultAppState)
         }}
       >
-        GO HOME
+        Reset State
       </Button>
       <h1>DEBUGPAGE</h1>
 
