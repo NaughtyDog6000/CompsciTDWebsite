@@ -15,7 +15,7 @@ export default function DebugPage() {
       >
         Reset State
       </Button>
-      <h1>DEBUGPAGE</h1>
+      <h1 className="h-auto text-8xl font-bold mb-2 mt-4">DEBUGPAGE</h1>
 
         {
           Object.entries(AppState).map((entry) => (

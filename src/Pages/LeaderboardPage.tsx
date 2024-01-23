@@ -33,6 +33,15 @@ import {
   DatePickerWithPresets,
   defaultDatePickerPresets,
 } from "@/components/DatePickerWithPresets";
+import { Toggle } from "@/components/ui/toggle";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const DefaultLeaderboardSettings: LeaderboardSettingsType = {
   record_count: 10,
@@ -73,6 +82,29 @@ export default function Leaderboard() {
       <h1 className="h-auto text-8xl font-bold mb-2 mt-4 break-words">
         Leaderboard Page
       </h1>
+
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <Button>1</Button>
+          </PaginationItem>
+          <PaginationItem>
+            <Button>2</Button>
+          </PaginationItem>
+          <PaginationItem>
+            <Button>3</Button>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent> 
+      </Pagination>
 
       <Sheet defaultOpen={controlPanelEnabled}>
         <SheetTrigger asChild>
@@ -165,10 +197,30 @@ export default function Leaderboard() {
                 <SelectValue placeholder="GameMode" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={GameModeEnum.Default}>Default</SelectItem>
-                <SelectItem value={GameModeEnum.Hardcore}>HardCore</SelectItem>
+                <SelectItem value={GameModeEnum.Default}>{GameModeEnum.Default}</SelectItem>
+                <SelectItem value={GameModeEnum.Hardcore}>{GameModeEnum.Hardcore}</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <Separator />
+          <p className="flex justify-center text-lg font-bold">Sort By</p>
+          {/* Sort By */}
+          <div>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={SortByEnum.Score}>{SortByEnum.Score}</SelectItem>
+                <SelectItem value={SortByEnum.MostRecent}>{SortByEnum.MostRecent}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          {/* Ascending vs Descending */}
+          <div>
+              <Toggle>
+                ASC
+              </Toggle>
           </div>
 
           {/* END OF ITEMS */}
