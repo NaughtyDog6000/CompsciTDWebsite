@@ -41,6 +41,7 @@ import {
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
+  PaginationLink
 } from "@/components/ui/pagination";
 
 const DefaultLeaderboardSettings: LeaderboardSettingsType = {
@@ -54,7 +55,7 @@ const DefaultLeaderboardSettings: LeaderboardSettingsType = {
   sort_ascending: false,
 };
 
-export default function Leaderboard() {
+export default function Leaderboard(): JSX.Element {
   const [controlPanelEnabled, setControlPanelEnabled] = useState(true);
   const [leaderboardSettings, SetLeaderboardSettings] =
     useState<LeaderboardSettingsType>(DefaultLeaderboardSettings);
@@ -83,28 +84,7 @@ export default function Leaderboard() {
         Leaderboard Page
       </h1>
 
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <Button>1</Button>
-          </PaginationItem>
-          <PaginationItem>
-            <Button>2</Button>
-          </PaginationItem>
-          <PaginationItem>
-            <Button>3</Button>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent> 
-      </Pagination>
+
 
       <Sheet defaultOpen={controlPanelEnabled}>
         <SheetTrigger asChild>
@@ -240,6 +220,43 @@ export default function Leaderboard() {
           </SheetFooter>
         </SheetContent>
       </Sheet>
+
+
+      {/* Page Selector */}
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <Button>1</Button>
+          </PaginationItem>
+          <PaginationItem>
+            <Button>2</Button>
+          </PaginationItem>
+          <PaginationItem>
+            <Button>3</Button>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent> 
+      </Pagination>
     </>
+  );
+}
+
+
+function CustomPaginationItem({href, enabled, value}: {href: string; enabled: boolean; value: number;}): JSX.Element {
+
+  return (
+  <>
+    <PaginationItem value={value}>
+      <PaginationLink href={href} isActive={enabled} >3</PaginationLink>
+    </PaginationItem>
+  </>
   );
 }
