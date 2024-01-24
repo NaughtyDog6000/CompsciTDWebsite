@@ -255,8 +255,50 @@ function CustomPaginationItem({href, enabled, value}: {href: string; enabled: bo
   return (
   <>
     <PaginationItem value={value}>
-      <PaginationLink href={href} isActive={enabled} >3</PaginationLink>
+      <PaginationLink href={href} isActive={enabled} >{value.toString()}</PaginationLink>
     </PaginationItem>
   </>
+  );
+}
+
+function PageSelector({CurrentPage, TotalPages, MaximumPageSelectors = 3}: {CurrentPage: number; TotalPages: number; MaximumPageSelectors: number;}): JSX.Element {
+  if (TotalPages <= 0) return (<>No Results for Query</>);
+  if (CurrentPage <= 0 || CurrentPage > TotalPages) return (<>An Error occured (current page outside of the range of available pages)</>);
+  if (MaximumPageSelectors < 1) return (<>Minimum Number of Page Selectors is 1</>);
+  
+  let NumberOfPageSelectors: number = TotalPages - CurrentPage;
+  if (NumberOfPageSelectors > MaximumPageSelectors) NumberOfPageSelectors = MaximumPageSelectors;
+
+  const PageSelectors = [];
+  for (let i = 0; i < NumberOfPageSelectors; i++) {
+    PageSelectors.push(<>
+      <PaginationItem>
+        <Button>1</Button>
+      </PaginationItem>
+    </>);
+  }
+
+  return (
+    <>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          {/* The pages Ahead of and the Currently Selected Page */}
+          {PageSelectors}
+
+          {/* if there are more pages than shown, show the ellipsis to indicate further pages */}
+          { TotalPages > CurrentPage + NumberOfPageSelectors - 1 && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          )}
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent> 
+      </Pagination>
+    </>
   );
 }
