@@ -223,28 +223,8 @@ export default function Leaderboard(): JSX.Element {
 
 
       {/* Page Selector */}
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <Button>1</Button>
-          </PaginationItem>
-          <PaginationItem>
-            <Button>2</Button>
-          </PaginationItem>
-          <PaginationItem>
-            <Button>3</Button>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent> 
-      </Pagination>
+      <PageSelector CurrentPage={1} TotalPages={5} MaximumPageSelectors={3} />
+
     </>
   );
 }
@@ -271,11 +251,7 @@ function PageSelector({CurrentPage, TotalPages, MaximumPageSelectors = 3}: {Curr
 
   const PageSelectors = [];
   for (let i = 0; i < NumberOfPageSelectors; i++) {
-    PageSelectors.push(<>
-      <PaginationItem>
-        <Button>1</Button>
-      </PaginationItem>
-    </>);
+    PageSelectors.push(<CustomPaginationItem  enabled={true} value={i+CurrentPage} href="#"/>);
   }
 
   return (
