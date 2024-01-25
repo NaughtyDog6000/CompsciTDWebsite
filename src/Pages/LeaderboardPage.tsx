@@ -280,7 +280,8 @@ export default function Leaderboard(): JSX.Element {
             })
           }}
         />
-      </div>      <div className="flex items-center space-x-2">
+      </div>      
+      <div className="flex items-center space-x-2">
         <Label htmlFor="Page-Slider" className="font-bold">total_records</Label>
         <Slider
           defaultValue={[1]}
@@ -296,7 +297,8 @@ export default function Leaderboard(): JSX.Element {
             })
           }}
         />
-              <div className="flex items-center space-x-2">
+      </div>
+      <div className="flex items-center space-x-2">
         <Label htmlFor="Page-Slider" className="font-bold">RecordsPerPage</Label>
         <Slider
           defaultValue={[1]}
@@ -312,7 +314,6 @@ export default function Leaderboard(): JSX.Element {
             })
           }}
         />
-      </div>
       </div>
       {/* Page Selector */}
       <PageSelector PageData={PageData}  MaximumPageSelectors={3} />
