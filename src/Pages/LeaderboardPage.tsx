@@ -345,7 +345,7 @@ function PageSelector({ PageData, MaximumPageSelectors = 3}:
 
     if (MaximumPageSelectors < 1) return (<>Minimum Number of Page Selectors is 1</>);
   
-  let NumberOfPageSelectors: number = PageData.number_of_pages - PageData.current_page;
+  let NumberOfPageSelectors: number = PageData.number_of_pages - PageData.current_page + 1;
   if (NumberOfPageSelectors > MaximumPageSelectors) NumberOfPageSelectors = MaximumPageSelectors;
 
   const PageSelectors = [];
