@@ -22,8 +22,12 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import {
+  DefaultLeaderboardResponseData,
+  DefaultPageData,
   GameModeEnum,
+  LeaderboardResponseDataType,
   LeaderboardSettingsType,
+  PageData,
   SortByEnum,
   VisbilityEnum,
 } from "@/Structs/LeaderboardState";
@@ -45,8 +49,7 @@ import {
 } from "@/components/ui/pagination";
 
 const DefaultLeaderboardSettings: LeaderboardSettingsType = {
-  record_count: 10,
-  page_offset: 0,
+  page_length: 10,
   visibility: VisbilityEnum.Private,
   game_mode: GameModeEnum.Default,
   uploaded_before: 0,
@@ -59,11 +62,34 @@ export default function Leaderboard(): JSX.Element {
   const [controlPanelEnabled, setControlPanelEnabled] = useState(true);
   const [leaderboardSettings, SetLeaderboardSettings] =
     useState<LeaderboardSettingsType>(DefaultLeaderboardSettings);
-  // the temporary store of the values, before it is either reset or applied (moved to the leaderboard settings state)
 
-  // const [tempLeaderboardSettings, SetTempLeaderboardSettings] = useState(
-  //   DefaultLeaderboardSettings
-  // );
+
+  const [ResponseData, SetResponseData] = useState<LeaderboardResponseDataType>(DefaultLeaderboardResponseData);
+  const [PageData, SetPageData] = useState<PageData>(DefaultPageData);
+
+  function CalculatePageData(Data: LeaderboardResponseDataType): PageData {
+    // if no records match the query then there is no data
+    if (Data.total_records <= 0 || Data.page_length <= 0) return ({
+      records: null,
+      current_page: 0,
+      number_of_pages: 0,
+      records_per_page: 0,
+      total_records: 0
+    });
+
+    let currentPage = Data.page_offset + 1;
+    let numberOfPages = Math.ceil(Data.total_records / Data.page_length);
+
+      return ({
+        records: null,
+        current_page: currentPage,
+        number_of_pages: numberOfPages,
+        records_per_page: Data.page_length,
+        total_records: Data.total_records
+      }) 
+  }
+
+
   // function ApplyLeaderboardSettings() {
   //   console.log("leaderboardsettings before: " + leaderboardSettings);
   //   SetLeaderboardSettings({
@@ -109,10 +135,10 @@ export default function Leaderboard(): JSX.Element {
           </p>
           <div className="flex items-center space-x-2">
             <Label htmlFor="RPP-slider" className="font-bold">
-              {leaderboardSettings.record_count}
+              {leaderboardSettings.page_length}
             </Label>
             <Slider
-              defaultValue={[leaderboardSettings.record_count]}
+              defaultValue={[leaderboardSettings.page_length]}
               id="RPP-slider"
               // todo!() the max should be based upon users signed in status
               max={50}
@@ -122,7 +148,7 @@ export default function Leaderboard(): JSX.Element {
               onValueChange={(values) => {
                 SetLeaderboardSettings({
                   ...leaderboardSettings,
-                  record_count: values[0],
+                  page_length: values[0],
                 });
               }}
             />
@@ -221,10 +247,77 @@ export default function Leaderboard(): JSX.Element {
         </SheetContent>
       </Sheet>
 
-
+      <div className="flex items-center space-x-2">
+        <Label htmlFor="Page-Slider" className="font-bold">CurrentPage</Label>
+        <Slider
+          defaultValue={[1]}
+          id="Page-Slider"
+          max={10}
+          min={0}
+          step={1}
+          className="my-2"
+          onValueChange={(values) => {
+            SetPageData({
+              ...PageData,
+              current_page: values[0]
+            })
+          }}
+        />
+      </div>
+      <div className="flex items-center space-x-2">
+        <Label htmlFor="Page-Slider" className="font-bold">NumberOfPages</Label>
+        <Slider
+          defaultValue={[1]}
+          id="Page-Slider"
+          max={10}
+          min={0}
+          step={1}
+          className="my-2"
+          onValueChange={(values) => {
+            SetPageData({
+              ...PageData,
+              number_of_pages: values[0]
+            })
+          }}
+        />
+      </div>      <div className="flex items-center space-x-2">
+        <Label htmlFor="Page-Slider" className="font-bold">total_records</Label>
+        <Slider
+          defaultValue={[1]}
+          id="Page-Slider"
+          max={50}
+          min={0}
+          step={1}
+          className="my-2"
+          onValueChange={(values) => {
+            SetPageData({
+              ...PageData,
+              total_records: values[0]
+            })
+          }}
+        />
+              <div className="flex items-center space-x-2">
+        <Label htmlFor="Page-Slider" className="font-bold">RecordsPerPage</Label>
+        <Slider
+          defaultValue={[1]}
+          id="Page-Slider"
+          max={50}
+          min={0}
+          step={1}
+          className="my-2"
+          onValueChange={(values) => {
+            SetPageData({
+              ...PageData,
+              records_per_page: values[0]
+            })
+          }}
+        />
+      </div>
+      </div>
       {/* Page Selector */}
-      <PageSelector CurrentPage={1} TotalPages={5} MaximumPageSelectors={3} />
+      <PageSelector PageData={PageData}  MaximumPageSelectors={3} />
 
+      
     </>
   );
 }
@@ -241,17 +334,22 @@ function CustomPaginationItem({href, enabled, value}: {href: string; enabled: bo
   );
 }
 
-function PageSelector({CurrentPage, TotalPages, MaximumPageSelectors = 3}: {CurrentPage: number; TotalPages: number; MaximumPageSelectors: number;}): JSX.Element {
-  if (TotalPages <= 0) return (<>No Results for Query</>);
-  if (CurrentPage <= 0 || CurrentPage > TotalPages) return (<>An Error occured (current page outside of the range of available pages)</>);
-  if (MaximumPageSelectors < 1) return (<>Minimum Number of Page Selectors is 1</>);
+function PageSelector({ PageData, MaximumPageSelectors = 3}: 
+  {  PageData: PageData;  MaximumPageSelectors: number;}
+  ): JSX.Element {
+    
+    if (PageData.total_records <= 0) return (<>No results for Query</>); // if there are no records
+    if (PageData.current_page > PageData.number_of_pages || PageData.current_page <= 0 ) return (<>Page Outside of the range of available pages</>); // if the page is one that doesnt exist
+    if (PageData.records_per_page <= 0) return (<>Impossible Query</>); // no records per page is impossible
+
+    if (MaximumPageSelectors < 1) return (<>Minimum Number of Page Selectors is 1</>);
   
-  let NumberOfPageSelectors: number = TotalPages - CurrentPage;
+  let NumberOfPageSelectors: number = PageData.number_of_pages - PageData.current_page;
   if (NumberOfPageSelectors > MaximumPageSelectors) NumberOfPageSelectors = MaximumPageSelectors;
 
   const PageSelectors = [];
   for (let i = 0; i < NumberOfPageSelectors; i++) {
-    PageSelectors.push(<CustomPaginationItem  enabled={true} value={i+CurrentPage} href="#"/>);
+    PageSelectors.push(<CustomPaginationItem  enabled={true} value={i+PageData.current_page} href="#"/>);
   }
 
   return (
@@ -265,7 +363,7 @@ function PageSelector({CurrentPage, TotalPages, MaximumPageSelectors = 3}: {Curr
           {PageSelectors}
 
           {/* if there are more pages than shown, show the ellipsis to indicate further pages */}
-          { TotalPages > CurrentPage + NumberOfPageSelectors - 1 && (
+          { PageData.number_of_pages > NumberOfPageSelectors && (
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
