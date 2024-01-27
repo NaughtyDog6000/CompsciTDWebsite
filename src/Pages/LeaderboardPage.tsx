@@ -22,10 +22,10 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import {
-  DefaultLeaderboardResponseData,
+  // DefaultLeaderboardResponseData,
   DefaultPageData,
   GameModeEnum,
-  LeaderboardResponseDataType,
+  // LeaderboardResponseDataType,
   LeaderboardSettingsType,
   PageData,
   SortByEnum,
@@ -45,7 +45,7 @@ import {
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-  PaginationLink
+  PaginationLink,
 } from "@/components/ui/pagination";
 
 const DefaultLeaderboardSettings: LeaderboardSettingsType = {
@@ -63,32 +63,32 @@ export default function Leaderboard(): JSX.Element {
   const [leaderboardSettings, SetLeaderboardSettings] =
     useState<LeaderboardSettingsType>(DefaultLeaderboardSettings);
 
-
-  const [ResponseData, SetResponseData] = useState<LeaderboardResponseDataType>(DefaultLeaderboardResponseData);
+  // const [ResponseData, SetResponseData] = useState<LeaderboardResponseDataType>(
+  //   DefaultLeaderboardResponseData
+  // );
   const [PageData, SetPageData] = useState<PageData>(DefaultPageData);
 
-  function CalculatePageData(Data: LeaderboardResponseDataType): PageData {
-    // if no records match the query then there is no data
-    if (Data.total_records <= 0 || Data.page_length <= 0) return ({
-      records: null,
-      current_page: 0,
-      number_of_pages: 0,
-      records_per_page: 0,
-      total_records: 0
-    });
+  // function CalculatePageData(Data: LeaderboardResponseDataType): PageData {
+  //   // if no records match the query then there is no data
+  //   if (Data.total_records <= 0 || Data.page_length <= 0)
+  //     return {
+  //       records: null,
+  //       current_page: 0,
+  //       number_of_pages: 0,
+  //       records_per_page: 0,
+  //       total_records: 0,
+  //     };
 
-    let currentPage = Data.page_offset + 1;
-    let numberOfPages = Math.ceil(Data.total_records / Data.page_length);
+  //   const numberOfPages = Math.ceil(Data.total_records / Data.page_length);
 
-      return ({
-        records: null,
-        current_page: currentPage,
-        number_of_pages: numberOfPages,
-        records_per_page: Data.page_length,
-        total_records: Data.total_records
-      }) 
-  }
-
+  //   return {
+  //     records: null,
+  //     current_page: Data.page_offset + 1,
+  //     number_of_pages: numberOfPages,
+  //     records_per_page: Data.page_length,
+  //     total_records: Data.total_records,
+  //   };
+  // }
 
   // function ApplyLeaderboardSettings() {
   //   console.log("leaderboardsettings before: " + leaderboardSettings);
@@ -109,8 +109,6 @@ export default function Leaderboard(): JSX.Element {
       <h1 className="h-auto text-8xl font-bold mb-2 mt-4 break-words">
         Leaderboard Page
       </h1>
-
-
 
       <Sheet defaultOpen={controlPanelEnabled}>
         <SheetTrigger asChild>
@@ -203,8 +201,12 @@ export default function Leaderboard(): JSX.Element {
                 <SelectValue placeholder="GameMode" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={GameModeEnum.Default}>{GameModeEnum.Default}</SelectItem>
-                <SelectItem value={GameModeEnum.Hardcore}>{GameModeEnum.Hardcore}</SelectItem>
+                <SelectItem value={GameModeEnum.Default}>
+                  {GameModeEnum.Default}
+                </SelectItem>
+                <SelectItem value={GameModeEnum.Hardcore}>
+                  {GameModeEnum.Hardcore}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -217,16 +219,18 @@ export default function Leaderboard(): JSX.Element {
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={SortByEnum.Score}>{SortByEnum.Score}</SelectItem>
-                <SelectItem value={SortByEnum.MostRecent}>{SortByEnum.MostRecent}</SelectItem>
+                <SelectItem value={SortByEnum.Score}>
+                  {SortByEnum.Score}
+                </SelectItem>
+                <SelectItem value={SortByEnum.MostRecent}>
+                  {SortByEnum.MostRecent}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
           {/* Ascending vs Descending */}
           <div>
-              <Toggle>
-                ASC
-              </Toggle>
+            <Toggle>ASC</Toggle>
           </div>
 
           {/* END OF ITEMS */}
@@ -248,7 +252,9 @@ export default function Leaderboard(): JSX.Element {
       </Sheet>
 
       <div className="flex items-center space-x-2">
-        <Label htmlFor="Page-Slider" className="font-bold">CurrentPage</Label>
+        <Label htmlFor="Page-Slider" className="font-bold">
+          CurrentPage
+        </Label>
         <Slider
           defaultValue={[1]}
           id="Page-Slider"
@@ -259,13 +265,15 @@ export default function Leaderboard(): JSX.Element {
           onValueChange={(values) => {
             SetPageData({
               ...PageData,
-              current_page: values[0]
-            })
+              current_page: values[0],
+            });
           }}
         />
       </div>
       <div className="flex items-center space-x-2">
-        <Label htmlFor="Page-Slider" className="font-bold">NumberOfPages</Label>
+        <Label htmlFor="Page-Slider" className="font-bold">
+          NumberOfPages
+        </Label>
         <Slider
           defaultValue={[1]}
           id="Page-Slider"
@@ -276,30 +284,15 @@ export default function Leaderboard(): JSX.Element {
           onValueChange={(values) => {
             SetPageData({
               ...PageData,
-              number_of_pages: values[0]
-            })
-          }}
-        />
-      </div>      
-      <div className="flex items-center space-x-2">
-        <Label htmlFor="Page-Slider" className="font-bold">total_records</Label>
-        <Slider
-          defaultValue={[1]}
-          id="Page-Slider"
-          max={50}
-          min={0}
-          step={1}
-          className="my-2"
-          onValueChange={(values) => {
-            SetPageData({
-              ...PageData,
-              total_records: values[0]
-            })
+              number_of_pages: values[0],
+            });
           }}
         />
       </div>
       <div className="flex items-center space-x-2">
-        <Label htmlFor="Page-Slider" className="font-bold">RecordsPerPage</Label>
+        <Label htmlFor="Page-Slider" className="font-bold">
+          total_records
+        </Label>
         <Slider
           defaultValue={[1]}
           id="Page-Slider"
@@ -310,47 +303,89 @@ export default function Leaderboard(): JSX.Element {
           onValueChange={(values) => {
             SetPageData({
               ...PageData,
-              records_per_page: values[0]
-            })
+              total_records: values[0],
+            });
+          }}
+        />
+      </div>
+      <div className="flex items-center space-x-2">
+        <Label htmlFor="Page-Slider" className="font-bold">
+          RecordsPerPage
+        </Label>
+        <Slider
+          defaultValue={[1]}
+          id="Page-Slider"
+          max={50}
+          min={0}
+          step={1}
+          className="my-2"
+          onValueChange={(values) => {
+            SetPageData({
+              ...PageData,
+              records_per_page: values[0],
+            });
           }}
         />
       </div>
       {/* Page Selector */}
-      <PageSelector PageData={PageData}  MaximumPageSelectors={3} />
-
-      
+      <PageSelector PageData={PageData} MaximumPageSelectors={3} />
     </>
   );
 }
 
-
-function CustomPaginationItem({href, enabled, value}: {href: string; enabled: boolean; value: number;}): JSX.Element {
-
+function CustomPaginationItem({
+  href,
+  enabled,
+  value,
+}: {
+  href: string;
+  enabled: boolean;
+  value: number;
+}): JSX.Element {
   return (
-  <>
-    <PaginationItem value={value}>
-      <PaginationLink href={href} isActive={enabled} >{value.toString()}</PaginationLink>
-    </PaginationItem>
-  </>
+    <>
+      <PaginationItem value={value}>
+        <PaginationLink href={href} isActive={enabled}>
+          {value.toString()}
+        </PaginationLink>
+      </PaginationItem>
+    </>
   );
 }
 
-function PageSelector({ PageData, MaximumPageSelectors = 3}: 
-  {  PageData: PageData;  MaximumPageSelectors: number;}
-  ): JSX.Element {
-    
-    if (PageData.total_records <= 0) return (<>No results for Query</>); // if there are no records
-    if (PageData.current_page > PageData.number_of_pages || PageData.current_page <= 0 ) return (<>Page Outside of the range of available pages</>); // if the page is one that doesnt exist
-    if (PageData.records_per_page <= 0) return (<>Impossible Query</>); // no records per page is impossible
+function PageSelector({
+  PageData,
+  MaximumPageSelectors = 3,
+}: {
+  PageData: PageData;
+  MaximumPageSelectors: number;
+}): JSX.Element {
+  if (PageData.total_records <= 0) return <>No results for Query</>; // if there are no records
+  if (
+    PageData.current_page > PageData.number_of_pages ||
+    PageData.current_page <= 0
+  ) {
+    return <>Page Outside of the range of available pages</>; // if the page is one that doesnt exist
+  }
+  if (PageData.records_per_page <= 0) return <>Impossible Query</>; // no records per page is impossible
 
-    if (MaximumPageSelectors < 1) return (<>Minimum Number of Page Selectors is 1</>);
-  
-  let NumberOfPageSelectors: number = PageData.number_of_pages - PageData.current_page + 1;
-  if (NumberOfPageSelectors > MaximumPageSelectors) NumberOfPageSelectors = MaximumPageSelectors;
+  if (MaximumPageSelectors < 1)
+    return <>Minimum Number of Page Selectors is 1</>;
+
+  let NumberOfPageSelectors: number =
+    PageData.number_of_pages - PageData.current_page + 1;
+  if (NumberOfPageSelectors > MaximumPageSelectors)
+    NumberOfPageSelectors = MaximumPageSelectors;
 
   const PageSelectors = [];
   for (let i = 0; i < NumberOfPageSelectors; i++) {
-    PageSelectors.push(<CustomPaginationItem  enabled={true} value={i+PageData.current_page} href="#"/>);
+    PageSelectors.push(
+      <CustomPaginationItem
+        enabled={true}
+        value={i + PageData.current_page}
+        href="#"
+      />
+    );
   }
 
   return (
@@ -364,15 +399,15 @@ function PageSelector({ PageData, MaximumPageSelectors = 3}:
           {PageSelectors}
 
           {/* if there are more pages than shown, show the ellipsis to indicate further pages */}
-          { PageData.number_of_pages > NumberOfPageSelectors && (
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
+          {PageData.number_of_pages > NumberOfPageSelectors && (
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
           )}
           <PaginationItem>
             <PaginationNext href="#" />
           </PaginationItem>
-        </PaginationContent> 
+        </PaginationContent>
       </Pagination>
     </>
   );

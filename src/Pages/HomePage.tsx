@@ -58,6 +58,7 @@ export default function HomePage() {
             className="mb-1"
             onClick={() => {
               SetAppState({
+                token: null,
                 DebugMode: true,
                 useDarkmode: true,
                 username: "bbno$",

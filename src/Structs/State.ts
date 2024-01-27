@@ -2,6 +2,7 @@ import { AppContext } from "@/App";
 import { useContext } from "react";
 
 export type AppState = {
+  token: string | null;
   username: string | null;
   userType: UserTypeEnum;
   DebugMode: boolean;
@@ -10,12 +11,13 @@ export type AppState = {
 };
 
 export const DefaultAppState: AppState = {
+  token: null,
   username: null,
   userType: UserTypeEnum.SignedOut,
   DebugMode: false,
   useDarkmode: false,
-  SignoutDialogOpen: false
-}
+  SignoutDialogOpen: false,
+};
 
 export const enum UserTypeEnum {
   SignedOut = 0,

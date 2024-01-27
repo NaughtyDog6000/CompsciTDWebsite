@@ -11,6 +11,7 @@ import { SignoutDialog } from "./components/Signout";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
+  token: null,
   DebugMode: false,
   username: null,
   userType: UserTypeEnum.User,

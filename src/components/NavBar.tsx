@@ -103,6 +103,7 @@ export function NavBar(): JSX.Element {
               SetAppState({ ...AppState, useDarkmode: checked });
             }}
             defaultChecked={AppState.useDarkmode}
+            checked={AppState.useDarkmode}
           />
           {AppState.userType >= UserTypeEnum.User && (
             <HamburgerMenu navigate={navigate} />
