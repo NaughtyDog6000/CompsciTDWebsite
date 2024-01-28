@@ -1,6 +1,6 @@
-## This is going to be a re-write of the website using tailwind and Typescript with Vite as the build and dev tooling
+# React + TypeScript + Vite
 
-# Tools
+## Tools
 
 - Vite
 - Typescript
@@ -8,9 +8,16 @@
 - Tailwind
 - Shadcn
 
-# Default stuff from Vite Below
+## todo/to look into
 
-# React + TypeScript + Vite
+- [x] user type requirements for page routes (signed out users cannot access profile pages, users cannot access admin pages etc)
+- [x] update Navbar to use the App context for conditionally rendering the links relevent to the user
+- [x] update SignoutDialog to work on all pages / be less coupled to the usestate of that page
+- []
+
+~~Redux / usecontext / use reducer (for state managment)~~
+
+## Default stuff from Vite Below
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

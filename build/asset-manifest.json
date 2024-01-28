@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.54dae5d0.css",
+    "main.js": "/static/js/main.101de4fa.js",
+    "static/media/Robco-Logo-No-BG-Black.svg": "/static/media/Robco-Logo-No-BG-Black.8dffbab4fe8b27915b1affe3bb9c2b0d.svg",
+    "static/media/Robco-Logo-No-BG-White.svg": "/static/media/Robco-Logo-No-BG-White.47ffeff101f3affffa3c5a3b9c0cd6b5.svg",
+    "static/media/Robco-Icon-No-BG-White.svg": "/static/media/Robco-Icon-No-BG-White.fa66c367c5e42abea56570d3e80117b3.svg",
+    "static/media/Robco-Icon-No-BG-Black.svg": "/static/media/Robco-Icon-No-BG-Black.429b74a32503af7330d4b1b7886c0f07.svg",
+    "index.html": "/index.html",
+    "main.54dae5d0.css.map": "/static/css/main.54dae5d0.css.map",
+    "main.101de4fa.js.map": "/static/js/main.101de4fa.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.54dae5d0.css",
+    "static/js/main.101de4fa.js"
+  ]
+}

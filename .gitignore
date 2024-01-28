@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dev-dist
 *.local
 
 # Editor directories and files
@@ -22,3 +23,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# templates folder (local folder used to copy paste imports and function exports etc for pages)
+.TEMPLATES/*
+.TEMPLATES\TEMPLATE.page.tsx
