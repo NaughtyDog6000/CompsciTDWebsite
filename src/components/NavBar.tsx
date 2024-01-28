@@ -9,9 +9,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UserTypeEnum, useAppState } from "@/Structs/State";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import {
+  HamburgerMenuIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@radix-ui/react-icons";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { Switch } from "@/components/ui/switch";
+import { useEffect, useState } from "react";
 type NavbarLink = {
   url: string;
   name: string;
@@ -21,6 +26,49 @@ type NavbarLink = {
 export function NavBar(): JSX.Element {
   const navigate = useNavigate();
   const { AppState, SetAppState } = useAppState();
+  const [NavOpen, SetNavOpen] = useState(true);
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // for some reason I have to use useEffect as if I query the width when
+  // the element is being rendered it doesnt work?
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Remove event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // check if the window is large, if so set the NavOpen to true so that the navbar is always shown on large displays
+  if (windowWidth >= 768 && NavOpen == false) {
+    SetNavOpen(true); // 768px is the "md" media query width for tailwind
+  } else {
+    console.log(window.innerWidth);
+  }
+
+  if (NavOpen === false)
+    return (
+      <>
+        <div className="bg-gray-800 p-2  md:hidden justify-center w-full">
+          <Button
+            variant={"outline"}
+            className="w-full"
+            onClick={() => {
+              SetNavOpen(true);
+            }}
+          >
+            <ChevronDownIcon />
+          </Button>
+        </div>
+      </>
+    );
 
   // these links will always be in the NavBar regardless of user state
   const NavbarLinks: NavbarLink[] = [
@@ -108,6 +156,18 @@ export function NavBar(): JSX.Element {
           {AppState.userType >= UserTypeEnum.User && (
             <HamburgerMenu navigate={navigate} />
           )}
+        </div>
+
+        <div className="md:hidden justify-center w-full pt-4">
+          <Button
+            variant={"outline"}
+            className="w-full"
+            onClick={() => {
+              SetNavOpen(false);
+            }}
+          >
+            <ChevronUpIcon />
+          </Button>
         </div>
       </nav>
     </>

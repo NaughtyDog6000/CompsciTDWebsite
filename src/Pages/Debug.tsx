@@ -29,7 +29,10 @@ export default function DebugPage() {
       >
         Reset State
       </Button>
-      <h1 className="h-auto text-8xl font-bold mb-2 mt-4">DEBUGPAGE</h1>
+
+      <h1 className="h-auto text-8xl font-bold mb-2 mt-4 break-words">
+        DEBUGPAGE
+      </h1>
       <h2 className="text-wrap italic p-2 text-red-800 dark:text-red-400">
         All modifications of the users permissions have no affect on what data
         the user can access (any auth routes will only send data to users with a

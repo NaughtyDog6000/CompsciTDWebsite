@@ -11,10 +11,11 @@
 ## todo/to look into
 
 - [x] user type requirements for page routes (signed out users cannot access profile pages, users cannot access admin pages etc)
-- [ ] update Navbar to use the App context for conditionally rendering the links relevent to the user
-- [ ] update SignoutDialog to work on all pages / be less coupled to the usestate of that page
+- [x] update Navbar to use the App context for conditionally rendering the links relevent to the user
+- [x] update SignoutDialog to work on all pages / be less coupled to the usestate of that page
+- []
 
-Redux / usecontext / use reducer (for state managment)
+~~Redux / usecontext / use reducer (for state managment)~~
 
 ## Default stuff from Vite Below
 

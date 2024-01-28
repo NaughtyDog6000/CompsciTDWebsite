@@ -8,6 +8,9 @@ import Leaderboard from "./Pages/LeaderboardPage";
 import DebugPage from "./Pages/Debug";
 import { UseDarkMode } from "./main";
 import { SignoutDialog } from "./components/Signout";
+import SigninPage from "./Pages/Signin";
+import { AuthRoute, SignedOutRoute } from "./lib/Routes";
+import AdminPage from "./Pages/AdminPages/A_Overview";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
@@ -37,6 +40,27 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/Leaderboard" element={<Leaderboard />} />
           <Route path="/Debug" element={<DebugPage />} />
+
+          <Route
+            path="/Signin"
+            element={
+              <SignedOutRoute fallbackPath="/Profile">
+                <SigninPage />
+              </SignedOutRoute>
+            }
+          />
+
+          <Route
+            path="/Admin"
+            element={
+              <AuthRoute
+                RequiredAuth={UserTypeEnum.Admin}
+                fallbackPath="/Signin"
+              >
+                <AdminPage />
+              </AuthRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AppContext.Provider>

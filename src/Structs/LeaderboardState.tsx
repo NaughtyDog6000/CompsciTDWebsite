@@ -77,5 +77,5 @@ export const MOCKLEADERBOARDRESPONSEDATA: LeaderboardResponseDataType = {
       username: "nd6k",
     },
   ],
-  total_records: 9,
+  total_records: 7,
 };

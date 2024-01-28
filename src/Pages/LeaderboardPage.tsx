@@ -23,10 +23,11 @@ import {
 import { Label } from "@/components/ui/label";
 import {
   // DefaultLeaderboardResponseData,
-  DefaultPageData,
   GameModeEnum,
+  LeaderboardResponseDataType,
   // LeaderboardResponseDataType,
   LeaderboardSettingsType,
+  MOCKLEADERBOARDRESPONSEDATA,
   PageData,
   SortByEnum,
   VisbilityEnum,
@@ -63,32 +64,10 @@ export default function Leaderboard(): JSX.Element {
   const [leaderboardSettings, SetLeaderboardSettings] =
     useState<LeaderboardSettingsType>(DefaultLeaderboardSettings);
 
-  // const [ResponseData, SetResponseData] = useState<LeaderboardResponseDataType>(
-  //   DefaultLeaderboardResponseData
-  // );
-  const [PageData, SetPageData] = useState<PageData>(DefaultPageData);
-
-  // function CalculatePageData(Data: LeaderboardResponseDataType): PageData {
-  //   // if no records match the query then there is no data
-  //   if (Data.total_records <= 0 || Data.page_length <= 0)
-  //     return {
-  //       records: null,
-  //       current_page: 0,
-  //       number_of_pages: 0,
-  //       records_per_page: 0,
-  //       total_records: 0,
-  //     };
-
-  //   const numberOfPages = Math.ceil(Data.total_records / Data.page_length);
-
-  //   return {
-  //     records: null,
-  //     current_page: Data.page_offset + 1,
-  //     number_of_pages: numberOfPages,
-  //     records_per_page: Data.page_length,
-  //     total_records: Data.total_records,
-  //   };
-  // }
+  const [ResponseData] = useState<LeaderboardResponseDataType>(
+    MOCKLEADERBOARDRESPONSEDATA
+  );
+  const [PageData] = useState<PageData>(CalculatePageData(ResponseData));
 
   // function ApplyLeaderboardSettings() {
   //   console.log("leaderboardsettings before: " + leaderboardSettings);
@@ -251,84 +230,14 @@ export default function Leaderboard(): JSX.Element {
         </SheetContent>
       </Sheet>
 
-      <div className="flex items-center space-x-2">
-        <Label htmlFor="Page-Slider" className="font-bold">
-          CurrentPage
-        </Label>
-        <Slider
-          defaultValue={[1]}
-          id="Page-Slider"
-          max={10}
-          min={0}
-          step={1}
-          className="my-2"
-          onValueChange={(values) => {
-            SetPageData({
-              ...PageData,
-              current_page: values[0],
-            });
-          }}
-        />
-      </div>
-      <div className="flex items-center space-x-2">
-        <Label htmlFor="Page-Slider" className="font-bold">
-          NumberOfPages
-        </Label>
-        <Slider
-          defaultValue={[1]}
-          id="Page-Slider"
-          max={10}
-          min={0}
-          step={1}
-          className="my-2"
-          onValueChange={(values) => {
-            SetPageData({
-              ...PageData,
-              number_of_pages: values[0],
-            });
-          }}
-        />
-      </div>
-      <div className="flex items-center space-x-2">
-        <Label htmlFor="Page-Slider" className="font-bold">
-          total_records
-        </Label>
-        <Slider
-          defaultValue={[1]}
-          id="Page-Slider"
-          max={50}
-          min={0}
-          step={1}
-          className="my-2"
-          onValueChange={(values) => {
-            SetPageData({
-              ...PageData,
-              total_records: values[0],
-            });
-          }}
-        />
-      </div>
-      <div className="flex items-center space-x-2">
-        <Label htmlFor="Page-Slider" className="font-bold">
-          RecordsPerPage
-        </Label>
-        <Slider
-          defaultValue={[1]}
-          id="Page-Slider"
-          max={50}
-          min={0}
-          step={1}
-          className="my-2"
-          onValueChange={(values) => {
-            SetPageData({
-              ...PageData,
-              records_per_page: values[0],
-            });
-          }}
-        />
-      </div>
       {/* Page Selector */}
-      <PageSelector PageData={PageData} MaximumPageSelectors={3} />
+      <footer>
+        <PageSelector
+          className="positio"
+          PageData={PageData}
+          MaximumPageSelectors={3}
+        />
+      </footer>
     </>
   );
 }
@@ -354,9 +263,11 @@ function CustomPaginationItem({
 }
 
 function PageSelector({
+  className,
   PageData,
   MaximumPageSelectors = 3,
 }: {
+  className: string;
   PageData: PageData;
   MaximumPageSelectors: number;
 }): JSX.Element {
@@ -379,36 +290,65 @@ function PageSelector({
 
   const PageSelectors = [];
   for (let i = 0; i < NumberOfPageSelectors; i++) {
+    const currentItemPage = i + PageData.current_page;
     PageSelectors.push(
       <CustomPaginationItem
-        enabled={true}
-        value={i + PageData.current_page}
+        enabled={currentItemPage === PageData.current_page}
+        value={currentItemPage}
         href="#"
       />
     );
   }
 
+  const numberOfPagesAhead = PageData.number_of_pages - PageData.current_page;
+
   return (
     <>
-      <Pagination>
+      <Pagination className={className}>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious href="#" />
+            <PaginationPrevious
+              variant={"ghost"}
+              disabled={true}
+              className=""
+            />
           </PaginationItem>
           {/* The pages Ahead of and the Currently Selected Page */}
           {PageSelectors}
 
           {/* if there are more pages than shown, show the ellipsis to indicate further pages */}
-          {PageData.number_of_pages > NumberOfPageSelectors && (
+          {numberOfPagesAhead > NumberOfPageSelectors - 1 && (
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
           )}
           <PaginationItem>
-            <PaginationNext href="#" />
+            <PaginationNext className="" disabled={false} variant={"ghost"} />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
     </>
   );
+}
+
+function CalculatePageData(Data: LeaderboardResponseDataType): PageData {
+  // if no records match the query then there is no data
+  if (Data.total_records <= 0 || Data.page_length <= 0)
+    return {
+      records: null,
+      current_page: 0,
+      number_of_pages: 0,
+      records_per_page: 0,
+      total_records: 0,
+    };
+
+  const numberOfPages = Math.ceil(Data.total_records / Data.page_length);
+
+  return {
+    records: Data.page_records,
+    current_page: Data.page_offset + 1,
+    number_of_pages: numberOfPages,
+    records_per_page: Data.page_length,
+    total_records: Data.total_records,
+  };
 }
