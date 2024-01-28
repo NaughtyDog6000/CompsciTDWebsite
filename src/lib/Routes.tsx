@@ -4,12 +4,12 @@ import { Navigate } from "react-router-dom";
 
 export const AuthRoute = ({
   children,
-  RequiredAuth,
+  RequiredAuth = UserTypeEnum.User,
   fallbackPath = "/signin",
 }: {
   children: ReactElement;
-  RequiredAuth: UserTypeEnum;
-  fallbackPath: string;
+  RequiredAuth?: UserTypeEnum;
+  fallbackPath?: string;
 }) => {
   const { AppState } = useAppState();
 

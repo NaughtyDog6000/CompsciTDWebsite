@@ -49,8 +49,6 @@ export function NavBar(): JSX.Element {
   // check if the window is large, if so set the NavOpen to true so that the navbar is always shown on large displays
   if (windowWidth >= 768 && NavOpen == false) {
     SetNavOpen(true); // 768px is the "md" media query width for tailwind
-  } else {
-    console.log(window.innerWidth);
   }
 
   if (NavOpen === false)

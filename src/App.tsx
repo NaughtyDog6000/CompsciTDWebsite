@@ -11,13 +11,15 @@ import { SignoutDialog } from "./components/Signout";
 import SigninPage from "./Pages/Signin";
 import { AuthRoute, SignedOutRoute } from "./lib/Routes";
 import AdminPage from "./Pages/AdminPages/A_Overview";
+import SignoutPage from "./Pages/SignoutPage";
+import SignupPage from "./Pages/Signup";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
   token: null,
   DebugMode: false,
   username: null,
-  userType: UserTypeEnum.User,
+  userType: UserTypeEnum.SignedOut,
   useDarkmode: true,
   SignoutDialogOpen: false,
 };
@@ -38,6 +40,14 @@ function App() {
         <Routes>
           <Route path="*" element={<Page404 />} />
           <Route path="/" element={<HomePage />} />
+          <Route
+            path="Signout"
+            element={
+              <AuthRoute>
+                <SignoutPage />
+              </AuthRoute>
+            }
+          />
           <Route path="/Leaderboard" element={<Leaderboard />} />
           <Route path="/Debug" element={<DebugPage />} />
 
@@ -46,6 +56,14 @@ function App() {
             element={
               <SignedOutRoute fallbackPath="/Profile">
                 <SigninPage />
+              </SignedOutRoute>
+            }
+          />
+          <Route
+            path="/Signup"
+            element={
+              <SignedOutRoute fallbackPath="/Signout">
+                <SignupPage />
               </SignedOutRoute>
             }
           />
