@@ -13,6 +13,7 @@ import { AuthRoute, SignedOutRoute } from "./lib/Routes";
 import AdminPage from "./Pages/AdminPages/A_Overview";
 import SignoutPage from "./Pages/SignoutPage";
 import SignupPage from "./Pages/Signup";
+import { Toaster } from "./components/ui/toaster";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
@@ -23,9 +24,11 @@ const defaultAppState: AppState = {
   useDarkmode: true,
   SignoutDialogOpen: false,
 };
+export const APIURLContext = createContext<string | undefined>(undefined);
 
 function App() {
   const [AppState, SetAppState] = useState<AppState>(defaultAppState);
+  const [APIURL] = useState("https://api.robbiecornock.com");
 
   useEffect(() => {
     UseDarkMode(AppState.useDarkmode);
@@ -34,53 +37,56 @@ function App() {
   useEffect(() => {});
   return (
     <AppContext.Provider value={{ AppState, SetAppState }}>
-      <SignoutDialog />
+      <APIURLContext.Provider value={APIURL}>
+        <SignoutDialog />
+        <Toaster />
 
-      <BrowserRouter>
-        <Routes>
-          <Route path="*" element={<Page404 />} />
-          <Route path="/" element={<HomePage />} />
-          <Route
-            path="Signout"
-            element={
-              <AuthRoute>
-                <SignoutPage />
-              </AuthRoute>
-            }
-          />
-          <Route path="/Leaderboard" element={<Leaderboard />} />
-          <Route path="/Debug" element={<DebugPage />} />
+        <BrowserRouter>
+          <Routes>
+            <Route path="*" element={<Page404 />} />
+            <Route path="/" element={<HomePage />} />
+            <Route
+              path="Signout"
+              element={
+                <AuthRoute>
+                  <SignoutPage />
+                </AuthRoute>
+              }
+            />
+            <Route path="/Leaderboard" element={<Leaderboard />} />
+            <Route path="/Debug" element={<DebugPage />} />
 
-          <Route
-            path="/Signin"
-            element={
-              <SignedOutRoute fallbackPath="/Profile">
-                <SigninPage />
-              </SignedOutRoute>
-            }
-          />
-          <Route
-            path="/Signup"
-            element={
-              <SignedOutRoute fallbackPath="/Signout">
-                <SignupPage />
-              </SignedOutRoute>
-            }
-          />
+            <Route
+              path="/Signin"
+              element={
+                <SignedOutRoute fallbackPath="/Profile">
+                  <SigninPage />
+                </SignedOutRoute>
+              }
+            />
+            <Route
+              path="/Signup"
+              element={
+                <SignedOutRoute fallbackPath="/Signout">
+                  <SignupPage />
+                </SignedOutRoute>
+              }
+            />
 
-          <Route
-            path="/Admin"
-            element={
-              <AuthRoute
-                RequiredAuth={UserTypeEnum.Admin}
-                fallbackPath="/Signin"
-              >
-                <AdminPage />
-              </AuthRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+            <Route
+              path="/Admin"
+              element={
+                <AuthRoute
+                  RequiredAuth={UserTypeEnum.Admin}
+                  fallbackPath="/Signin"
+                >
+                  <AdminPage />
+                </AuthRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </APIURLContext.Provider>
     </AppContext.Provider>
   );
 }

@@ -1,4 +1,4 @@
-import { UserTypeEnum, useAppState } from "@/Structs/State";
+import { UserTypeEnum, useAPIURL, useAppState } from "@/Structs/State";
 import { NavBar } from "@/components/NavBar";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
@@ -14,13 +14,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
 export function SigninForm({ className }: { className?: string }): JSX.Element {
-  const { AppState, SetAppState } = useAppState();
+  // const { AppState, SetAppState } = useAppState();
+  const APIURL = useAPIURL();
+  const { toast } = useToast();
 
   const SigninFormSchema = z.object({
     username: z
@@ -40,9 +43,34 @@ export function SigninForm({ className }: { className?: string }): JSX.Element {
     },
   });
 
-  function onSubmit(values: z.infer<typeof SigninFormSchema>) {
+  async function onSubmit(values: z.infer<typeof SigninFormSchema>) {
     console.log(values);
-    SetAppState({ ...AppState, userType: UserTypeEnum.User });
+
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json; charset=UTF-8");
+
+    // send the username and password to the signin api Route
+    const response = await fetch(APIURL + "/signin", {
+      method: "POST",
+      headers: headers,
+      mode: "cors",
+      body: JSON.stringify(values),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("Failed To Signup: ", error);
+      toast({
+        title: "ERROR",
+        description: `an error occured: ${error.response}`,
+      });
+      return;
+    }
+
+    const json = await response.json();
+    console.log(json);
+
+    // SetAppState({ ...AppState, userType: UserTypeEnum.User });
   }
 
   return (

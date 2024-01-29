@@ -1,4 +1,4 @@
-import { AppContext } from "@/App";
+import { APIURLContext, AppContext } from "@/App";
 import { useContext } from "react";
 
 export type AppState = {
@@ -35,6 +35,16 @@ export function useAppState(): AppContextProps {
   if (!context) {
     throw new Error(
       "the App context was not provided, appstate can only be used where it is provided"
+    );
+  }
+  return context;
+}
+
+export function useAPIURL(): string {
+  const context = useContext(APIURLContext);
+  if (!context) {
+    throw new Error(
+      "the APIURL context was not provided, APIURL can only be used where it is provided"
     );
   }
   return context;
