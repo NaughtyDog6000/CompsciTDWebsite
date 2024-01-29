@@ -15,7 +15,6 @@ import SignoutPage from "./Pages/SignoutPage";
 import SignupPage from "./Pages/Signup";
 import { Toaster } from "./components/ui/toaster";
 import ProfilePage from "./Pages/ProfilePage";
-import { Helmet } from "react-helmet";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
@@ -40,19 +39,6 @@ function App() {
   return (
     <>
       {/* link preview stuff */}
-      <Helmet>
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://robbiecornock.com" />
-        <meta property="og:title" content="Rob's Compsci Project" />
-        <meta
-          property="og:description"
-          content="my computerscience project, at least the website portion of it. The website contains the leaderboard, profiles, signup and account managment options for the project."
-        />
-        <meta
-          property="og:image"
-          content="https://www.iana.org/_img/2015.1/iana-logo-homepage.svg"
-        />
-      </Helmet>
 
       <AppContext.Provider value={{ AppState, SetAppState }}>
         <APIURLContext.Provider value={APIURL}>
