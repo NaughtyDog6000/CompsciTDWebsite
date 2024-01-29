@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 export function SigninForm({ className }: { className?: string }): JSX.Element {
-  // const { AppState, SetAppState } = useAppState();
+  const { AppState, SetAppState } = useAppState();
   const APIURL = useAPIURL();
   const { toast } = useToast();
 
@@ -44,7 +44,7 @@ export function SigninForm({ className }: { className?: string }): JSX.Element {
   });
 
   async function onSubmit(values: z.infer<typeof SigninFormSchema>) {
-    console.log(values);
+    // console.log(values);
 
     const headers = new Headers();
     headers.append("Content-Type", "application/json; charset=UTF-8");
@@ -68,8 +68,16 @@ export function SigninForm({ className }: { className?: string }): JSX.Element {
     }
 
     const json = await response.json();
-    console.log(json);
+    toast({
+      title: "Signin Success!",
+      description: "you successfully signed in :)",
+    });
 
+    SetAppState({
+      ...AppState,
+      token: json.token,
+      userType: UserTypeEnum.Admin,
+    });
     // SetAppState({ ...AppState, userType: UserTypeEnum.User });
   }
 

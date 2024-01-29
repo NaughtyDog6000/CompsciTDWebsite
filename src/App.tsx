@@ -14,6 +14,7 @@ import AdminPage from "./Pages/AdminPages/A_Overview";
 import SignoutPage from "./Pages/SignoutPage";
 import SignupPage from "./Pages/Signup";
 import { Toaster } from "./components/ui/toaster";
+import ProfilePage from "./Pages/ProfilePage";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
@@ -81,6 +82,18 @@ function App() {
                   fallbackPath="/Signin"
                 >
                   <AdminPage />
+                </AuthRoute>
+              }
+            />
+
+            <Route
+              path="/Profile"
+              element={
+                <AuthRoute
+                  RequiredAuth={UserTypeEnum.User}
+                  fallbackPath="/Signin"
+                >
+                  <ProfilePage />
                 </AuthRoute>
               }
             />

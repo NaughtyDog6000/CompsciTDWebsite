@@ -22,12 +22,11 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import {
-  // DefaultLeaderboardResponseData,
+  DefaultPageData,
   GameModeEnum,
+  LeaderboardQueryParams,
   LeaderboardResponseDataType,
-  // LeaderboardResponseDataType,
   LeaderboardSettingsType,
-  MOCKLEADERBOARDRESPONSEDATA,
   PageData,
   SortByEnum,
   VisbilityEnum,
@@ -49,34 +48,89 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 
+import { columns } from "@/components/Leaderboard/LColumns";
+import L_Table from "@/components/Leaderboard/LTable";
+import { useAPIURL, useAppState } from "@/Structs/State";
+import { toast } from "@/components/ui/use-toast";
+
 const DefaultLeaderboardSettings: LeaderboardSettingsType = {
+  current_page: 1,
   page_length: 10,
-  visibility: VisbilityEnum.Private,
+  visibility: VisbilityEnum.Public,
   game_mode: GameModeEnum.Default,
-  uploaded_before: 0,
+  uploaded_before: 9999999999,
   uploaded_after: 0,
-  Sort_by: SortByEnum.Score,
+  sort_by: SortByEnum.Score,
   sort_ascending: false,
 };
 
 export default function Leaderboard(): JSX.Element {
-  const [controlPanelEnabled, setControlPanelEnabled] = useState(true);
+  const [controlPanelEnabled, setControlPanelEnabled] = useState(false);
   const [leaderboardSettings, SetLeaderboardSettings] =
     useState<LeaderboardSettingsType>(DefaultLeaderboardSettings);
+  const APIURL = useAPIURL();
+  const { AppState } = useAppState();
 
-  const [ResponseData] = useState<LeaderboardResponseDataType>(
-    MOCKLEADERBOARDRESPONSEDATA
-  );
-  const [PageData] = useState<PageData>(CalculatePageData(ResponseData));
+  const [PageData, SetPageData] = useState<PageData>(DefaultPageData);
 
-  // function ApplyLeaderboardSettings() {
-  //   console.log("leaderboardsettings before: " + leaderboardSettings);
-  //   SetLeaderboardSettings({
-  //     ...leaderboardSettings,
-  //     ...tempLeaderboardSettings,
-  //   });
-  //   console.log("leaderboard settings after: " + leaderboardSettings);
-  // }
+  async function UpdateLeaderboardPageData(
+    leaderboardSettings: LeaderboardSettingsType
+  ) {
+    // if the user is not signed in, currently they cannot access the Leaderboard
+    // TODO!() allow non signed in usage
+    if (AppState.token === null) {
+      console.warn("cannot update without token");
+      toast({
+        title: "ERROR",
+        description: "current impl cannot update without a token",
+      });
+      return;
+    }
+
+    if (leaderboardSettings.current_page <= 0) return;
+
+    // create the json/object that will contain all the settings/info needed
+    const req_config: LeaderboardQueryParams = {
+      page_length: leaderboardSettings.page_length,
+      page_offset: leaderboardSettings.current_page - 1,
+      visibility: leaderboardSettings.visibility,
+      game_mode: leaderboardSettings.game_mode,
+      order_by: leaderboardSettings.sort_by,
+      order_ascending: leaderboardSettings.sort_ascending,
+      uploaded_after: leaderboardSettings.uploaded_after,
+      uploaded_before: leaderboardSettings.uploaded_before,
+    };
+
+    // create the appropriate headers including the user's auth token
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json; charset=UTF-8");
+    headers.append("auth", AppState.token);
+
+    // fetch leaderboard data from the API
+    console.log(APIURL + "/leaderboard/scores");
+    const response = await fetch(APIURL + "/leaderboard/scores", {
+      method: "POST",
+      headers: headers,
+      mode: "cors",
+      body: JSON.stringify(req_config),
+    });
+    // parse the page data into the correct type
+    if (!response.ok) {
+      console.warn("error with leaderboard update request");
+      toast({
+        title: "ERROR",
+        description: "leaderboard did not respond, or responded with an error",
+      });
+      return;
+    }
+    // calculate derived properties of the data
+    const LBResponseData: LeaderboardResponseDataType = await response.json();
+    const pageData = CalculatePageData(LBResponseData);
+
+    // set the PageData
+    SetPageData(pageData);
+  }
+
   return (
     <>
       <Helmet>
@@ -230,6 +284,20 @@ export default function Leaderboard(): JSX.Element {
         </SheetContent>
       </Sheet>
 
+      {PageData.records !== null ? (
+        <L_Table columns={columns} data={PageData.records} />
+      ) : (
+        <></>
+      )}
+
+      <Button
+        onClick={() => {
+          UpdateLeaderboardPageData(leaderboardSettings);
+        }}
+      >
+        UPDATE
+      </Button>
+
       {/* Page Selector */}
       <footer>
         <PageSelector
@@ -333,7 +401,11 @@ function PageSelector({
 
 function CalculatePageData(Data: LeaderboardResponseDataType): PageData {
   // if no records match the query then there is no data
-  if (Data.total_records <= 0 || Data.page_length <= 0)
+  if (
+    Data.total_records <= 0 ||
+    Data.page_length <= 0 ||
+    Data.page_records === null
+  )
     return {
       records: null,
       current_page: 0,

@@ -21,15 +21,6 @@ export default function HomePage() {
           <Button
             className="mb-1"
             onClick={() => {
-              SetAppState({ ...AppState, SignoutDialogOpen: true });
-            }}
-          >
-            Signout Dialog
-          </Button>
-
-          <Button
-            className="mb-1"
-            onClick={() => {
               if (AppState.userType >= UserTypeEnum.User) {
                 SetAppState({ ...AppState, userType: UserTypeEnum.SignedOut });
               } else {
@@ -41,29 +32,24 @@ export default function HomePage() {
           </Button>
 
           <div className="flex items-center space-x-2">
-            <Switch id="debug-switch" />
+            <Switch
+              id="debug-switch"
+              onCheckedChange={(value) => {
+                SetAppState({ ...AppState, DebugMode: value });
+              }}
+            />
             <Label htmlFor="debug-switch">Debug?</Label>
           </div>
 
           <Button
             className="mb-1"
             onClick={() => {
-              console.log(JSON.stringify(AppState));
-            }}
-          >
-            LOG APP STATE
-          </Button>
-
-          <Button
-            className="mb-1"
-            onClick={() => {
               SetAppState({
-                token: null,
+                ...AppState,
                 DebugMode: true,
                 useDarkmode: true,
                 username: "bbno$",
                 userType: UserTypeEnum.Admin,
-                SignoutDialogOpen: false,
               });
             }}
           >

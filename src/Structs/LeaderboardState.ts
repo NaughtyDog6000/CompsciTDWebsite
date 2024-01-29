@@ -1,10 +1,13 @@
+import { LRecordType } from "@/components/Leaderboard/LColumns";
+
 export type LeaderboardSettingsType = {
+  current_page: number;
   page_length: number;
   visibility: VisbilityEnum;
   game_mode: GameModeEnum;
   uploaded_before: number;
   uploaded_after: number;
-  Sort_by: SortByEnum;
+  sort_by: SortByEnum;
   sort_ascending: boolean;
 };
 
@@ -12,7 +15,7 @@ export type LeaderboardResponseDataType = {
   total_records: number; //the total number of records meeting the filters set
   page_length: number; // the max number of records in each page
   page_offset: number;
-  page_records: object[] | null;
+  page_records: LRecordType[] | null;
 };
 
 export type PageData = {
@@ -20,7 +23,7 @@ export type PageData = {
   number_of_pages: number;
   records_per_page: number;
   total_records: number;
-  records: object[] | null;
+  records: LRecordType[] | null;
 };
 
 export enum GameModeEnum {
@@ -49,14 +52,7 @@ export const DefaultPageData: PageData = {
   records: null,
 };
 
-export const DefaultLeaderboardResponseData: LeaderboardResponseDataType = {
-  total_records: 0,
-  page_length: 0,
-  page_offset: 0,
-  page_records: null,
-};
-
-export const MOCKLEADERBOARDRESPONSEDATA: LeaderboardResponseDataType = {
+export const MOCKLEADERBOARDRESPONSEDATA = {
   page_length: 2,
   page_offset: 0,
   page_records: [
@@ -78,4 +74,17 @@ export const MOCKLEADERBOARDRESPONSEDATA: LeaderboardResponseDataType = {
     },
   ],
   total_records: 7,
+};
+
+// the exact object structure used by the api
+
+export type LeaderboardQueryParams = {
+  page_length: number;
+  page_offset: number;
+  visibility: VisbilityEnum;
+  game_mode: GameModeEnum;
+  order_by: SortByEnum;
+  order_ascending: boolean;
+  uploaded_after: number;
+  uploaded_before: number;
 };

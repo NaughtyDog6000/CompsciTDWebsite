@@ -7,7 +7,9 @@ export default function Page404() {
       <Helmet>
         <title>Page Not Found | Compsci TD</title>
       </Helmet>
-      <h1>Page not found :(</h1>
+      <h1 className="h-auto text-8xl font-bold mb-2 mt-4 break-words">
+        Page not found :(
+      </h1>
 
       <Button asChild>
         <Link to="/">Return Home</Link>

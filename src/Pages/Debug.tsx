@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { NavBar } from "@/components/NavBar";
-import { DefaultAppState, useAppState } from "@/Structs/State";
+import { DefaultAppState, useAPIURL, useAppState } from "@/Structs/State";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
@@ -12,9 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 export default function DebugPage() {
   const { AppState, SetAppState } = useAppState();
-
+  const APIURL = useAPIURL();
   const [token, SetToken] = useState("");
 
   return (
@@ -45,6 +46,7 @@ export default function DebugPage() {
           {entry[0]}: {entry[1]}
         </p>
       ))}
+      <p>APIURL: {APIURL}</p>
 
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-row gap-2">
