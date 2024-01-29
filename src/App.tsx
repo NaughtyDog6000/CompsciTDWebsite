@@ -15,6 +15,7 @@ import SignoutPage from "./Pages/SignoutPage";
 import SignupPage from "./Pages/Signup";
 import { Toaster } from "./components/ui/toaster";
 import ProfilePage from "./Pages/ProfilePage";
+import { Helmet } from "react-helmet";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
@@ -37,70 +38,87 @@ function App() {
 
   useEffect(() => {});
   return (
-    <AppContext.Provider value={{ AppState, SetAppState }}>
-      <APIURLContext.Provider value={APIURL}>
-        <SignoutDialog />
-        <Toaster />
+    <>
+      {/* link preview stuff */}
+      <Helmet>
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://robbiecornock.com" />
+        <meta property="og:title" content="Rob's Compsci Project" />
+        <meta
+          property="og:description"
+          content="my computerscience project, at least the website portion of it. The website contains the leaderboard, profiles, signup and account managment options for the project."
+        />
+        <meta
+          property="og:image"
+          content="https://www.iana.org/_img/2015.1/iana-logo-homepage.svg"
+        />
+      </Helmet>
 
-        <BrowserRouter>
-          <Routes>
-            <Route path="*" element={<Page404 />} />
-            <Route path="/" element={<HomePage />} />
-            <Route
-              path="Signout"
-              element={
-                <AuthRoute>
-                  <SignoutPage />
-                </AuthRoute>
-              }
-            />
-            <Route path="/Leaderboard" element={<Leaderboard />} />
-            <Route path="/Debug" element={<DebugPage />} />
+      <AppContext.Provider value={{ AppState, SetAppState }}>
+        <APIURLContext.Provider value={APIURL}>
+          <SignoutDialog />
+          <Toaster />
 
-            <Route
-              path="/Signin"
-              element={
-                <SignedOutRoute fallbackPath="/Profile">
-                  <SigninPage />
-                </SignedOutRoute>
-              }
-            />
-            <Route
-              path="/Signup"
-              element={
-                <SignedOutRoute fallbackPath="/Signout">
-                  <SignupPage />
-                </SignedOutRoute>
-              }
-            />
+          <BrowserRouter>
+            <Routes>
+              <Route path="*" element={<Page404 />} />
+              <Route path="/" element={<HomePage />} />
+              <Route
+                path="Signout"
+                element={
+                  <AuthRoute>
+                    <SignoutPage />
+                  </AuthRoute>
+                }
+              />
+              <Route path="/Leaderboard" element={<Leaderboard />} />
+              <Route path="/Debug" element={<DebugPage />} />
 
-            <Route
-              path="/Admin"
-              element={
-                <AuthRoute
-                  RequiredAuth={UserTypeEnum.Admin}
-                  fallbackPath="/Signin"
-                >
-                  <AdminPage />
-                </AuthRoute>
-              }
-            />
+              <Route
+                path="/Signin"
+                element={
+                  <SignedOutRoute fallbackPath="/Profile">
+                    <SigninPage />
+                  </SignedOutRoute>
+                }
+              />
+              <Route
+                path="/Signup"
+                element={
+                  <SignedOutRoute fallbackPath="/Signout">
+                    <SignupPage />
+                  </SignedOutRoute>
+                }
+              />
 
-            <Route
-              path="/Profile"
-              element={
-                <AuthRoute
-                  RequiredAuth={UserTypeEnum.User}
-                  fallbackPath="/Signin"
-                >
-                  <ProfilePage />
-                </AuthRoute>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </APIURLContext.Provider>
-    </AppContext.Provider>
+              <Route
+                path="/Admin"
+                element={
+                  <AuthRoute
+                    RequiredAuth={UserTypeEnum.Admin}
+                    fallbackPath="/Signin"
+                  >
+                    <AdminPage />
+                  </AuthRoute>
+                }
+              />
+
+              <Route
+                path="/Profile"
+                element={
+                  <AuthRoute
+                    RequiredAuth={UserTypeEnum.User}
+                    fallbackPath="/Signin"
+                  >
+                    <ProfilePage />
+                  </AuthRoute>
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+        </APIURLContext.Provider>
+      </AppContext.Provider>
+    </>
   );
 }
 
