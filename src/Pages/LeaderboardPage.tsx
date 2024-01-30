@@ -47,6 +47,7 @@ import {
   PaginationPrevious,
   PaginationLink,
 } from "@/components/ui/pagination";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { columns } from "@/components/Leaderboard/LColumns";
 import L_Table from "@/components/Leaderboard/LTable";
@@ -154,133 +155,135 @@ export default function Leaderboard(): JSX.Element {
           </Button>
         </SheetTrigger>
         <SheetContent>
-          <SheetHeader>
-            <SheetTitle>TITLE</SheetTitle>
-            <SheetDescription>
-              Change what is shown on the Leaderboard and how it is presented.
-            </SheetDescription>
-          </SheetHeader>
-          <Separator />
-          <p className="flex justify-center text-lg font-bold">
-            Number of records per page
-          </p>
-          <div className="flex items-center space-x-2">
-            <Label htmlFor="RPP-slider" className="font-bold">
-              {leaderboardSettings.page_length}
-            </Label>
-            <Slider
-              defaultValue={[leaderboardSettings.page_length]}
-              id="RPP-slider"
-              // todo!() the max should be based upon users signed in status
-              max={50}
-              min={10}
-              step={10}
-              className="my-2"
-              onValueChange={(values) => {
-                SetLeaderboardSettings({
-                  ...leaderboardSettings,
-                  page_length: values[0],
-                });
-              }}
-            />
-          </div>
+          <ScrollArea className="w-auto h-auto">
+            <SheetHeader>
+              <SheetTitle>Leaderboard Settings</SheetTitle>
+              <SheetDescription>
+                Change what is shown on the Leaderboard and how it is presented.
+              </SheetDescription>
+            </SheetHeader>
+            <Separator />
+            <p className="flex justify-center text-lg font-bold">
+              Number of records per page
+            </p>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="RPP-slider" className="font-bold">
+                {leaderboardSettings.page_length}
+              </Label>
+              <Slider
+                defaultValue={[leaderboardSettings.page_length]}
+                id="RPP-slider"
+                // todo!() the max should be based upon users signed in status
+                max={50}
+                min={10}
+                step={10}
+                className="my-2"
+                onValueChange={(values) => {
+                  SetLeaderboardSettings({
+                    ...leaderboardSettings,
+                    page_length: values[0],
+                  });
+                }}
+              />
+            </div>
 
-          {/* radio buttons for visbility filter */}
-          <Separator />
-          <p className="flex justify-center text-lg font-bold">Visability</p>
-          <div>
-            <RadioGroup
-              defaultValue="public"
-              className="flex flex-row justify-center py-4"
-              onValueChange={(value) => {
-                console.log(value);
-              }}
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem id="visibility-public" value="public" />
-                <Label htmlFor="visibility-public">Public</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem id="visibility-friends" value="friends" />
-                <Label htmlFor="visibility-friends">Friends</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem id="visibility-private" value="private" />
-                <Label htmlFor="visibility-private">Private</Label>
-              </div>
-            </RadioGroup>
-          </div>
-          {/* DatePickers for timeperiod of records allowed */}
-          <Separator />
-          <p className="flex justify-center text-lg font-bold">Upload Range</p>
-
-          <p>AllTime / Custom Radio Buttons</p>
-
-          <p>Uploaded Before: </p>
-          <div>
-            <DatePickerWithPresets CustomPresets={defaultDatePickerPresets} />
-          </div>
-          <p>Uploaded After: </p>
-          <div>
-            <DatePickerWithPresets CustomPresets={defaultDatePickerPresets} />
-          </div>
-
-          <Separator />
-          <p className="flex justify-center text-lg font-bold">Game Type</p>
-          {/* Game Mode Selector */}
-          <div className="my-2">
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="GameMode" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={GameModeEnum.Default}>
-                  {GameModeEnum.Default}
-                </SelectItem>
-                <SelectItem value={GameModeEnum.Hardcore}>
-                  {GameModeEnum.Hardcore}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <Separator />
-          <p className="flex justify-center text-lg font-bold">Sort By</p>
-          {/* Sort By */}
-          <div>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={SortByEnum.Score}>
-                  {SortByEnum.Score}
-                </SelectItem>
-                <SelectItem value={SortByEnum.MostRecent}>
-                  {SortByEnum.MostRecent}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          {/* Ascending vs Descending */}
-          <div>
-            <Toggle>ASC</Toggle>
-          </div>
-
-          {/* END OF ITEMS */}
-          <SheetFooter>
-            <Button variant={"default"}>Apply</Button>
-            <Button variant={"destructive"}>Reset</Button>
-            <SheetClose asChild>
-              <Button
-                variant={"outline"}
-                onClick={() => {
-                  setControlPanelEnabled(false);
+            {/* radio buttons for visbility filter */}
+            <Separator />
+            <p className="flex justify-center text-lg font-bold">Visability</p>
+            <div>
+              <RadioGroup
+                defaultValue="public"
+                className="flex flex-row justify-center py-4"
+                onValueChange={(value) => {
+                  console.log(value);
                 }}
               >
-                Close
-              </Button>
-            </SheetClose>
-          </SheetFooter>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem id="visibility-public" value="public" />
+                  <Label htmlFor="visibility-public">Public</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem id="visibility-friends" value="friends" />
+                  <Label htmlFor="visibility-friends">Friends</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem id="visibility-private" value="private" />
+                  <Label htmlFor="visibility-private">Private</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            {/* DatePickers for timeperiod of records allowed */}
+            <Separator />
+            <p className="flex justify-center text-lg font-bold">Upload Range</p>
+
+            <p>AllTime / Custom Radio Buttons</p>
+
+            <p>Uploaded Before: </p>
+            <div>
+              <DatePickerWithPresets CustomPresets={defaultDatePickerPresets} />
+            </div>
+            <p>Uploaded After: </p>
+            <div>
+              <DatePickerWithPresets CustomPresets={defaultDatePickerPresets} />
+            </div>
+
+            <Separator />
+            <p className="flex justify-center text-lg font-bold">Game Type</p>
+            {/* Game Mode Selector */}
+            <div className="my-2">
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="GameMode" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={GameModeEnum.Default}>
+                    {GameModeEnum.Default}
+                  </SelectItem>
+                  <SelectItem value={GameModeEnum.Hardcore}>
+                    {GameModeEnum.Hardcore}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Separator />
+            <p className="flex justify-center text-lg font-bold">Sort By</p>
+            {/* Sort By */}
+            <div>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={SortByEnum.Score}>
+                    {SortByEnum.Score}
+                  </SelectItem>
+                  <SelectItem value={SortByEnum.MostRecent}>
+                    {SortByEnum.MostRecent}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {/* Ascending vs Descending */}
+            <div>
+              <Toggle>ASC</Toggle>
+            </div>
+
+            {/* END OF ITEMS */}
+            <SheetFooter>
+              <Button variant={"default"}>Apply</Button>
+              <Button variant={"destructive"}>Reset</Button>
+              <SheetClose asChild>
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    setControlPanelEnabled(false);
+                  }}
+                >
+                  Close
+                </Button>
+              </SheetClose>
+            </SheetFooter>
+          </ScrollArea>
         </SheetContent>
       </Sheet>
 
