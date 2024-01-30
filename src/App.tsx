@@ -15,6 +15,7 @@ import SignoutPage from "./Pages/SignoutPage";
 import SignupPage from "./Pages/Signup";
 import { Toaster } from "./components/ui/toaster";
 import ProfilePage from "./Pages/ProfilePage";
+import UserProfilePage from "./Pages/UserProfilePage";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
@@ -100,6 +101,7 @@ function App() {
                   </AuthRoute>
                 }
               />
+              <Route path="/user/:username" element={<UserProfilePage />} />
             </Routes>
           </BrowserRouter>
         </APIURLContext.Provider>
