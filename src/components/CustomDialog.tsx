@@ -87,17 +87,22 @@ export function CustomDialog() {
       <Dialog defaultOpen={true} open={true}>
         <DialogContentNoCloser>
           {/* Force Close Button */}
-          <Button
-            onClick={() =>
-              handleClose({
-                data: null,
-                description: "closed via the X button",
-                outcome: DialogOutcomeEnum.ForceClosed,
-              })
-            }
-          >
-            X
-          </Button>
+          <div className="flex-row pb-0">
+            <Button
+              className="h-10 w-10 float-end"
+              variant={"ghost"}
+              onClick={() =>
+                handleClose({
+                  data: null,
+                  description: "closed via the X button",
+                  outcome: DialogOutcomeEnum.ForceClosed,
+                })
+              }
+            >
+              X
+            </Button>
+          </div>
+
           {/* Custom Content */}
           <div className="content">
             {CurrentDialog.content({ handleClose })}
