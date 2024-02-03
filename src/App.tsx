@@ -1,6 +1,11 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { useState, createContext, useEffect } from "react";
-import { AppContextProps, AppState, UserTypeEnum } from "./Structs/State";
+import {
+  AppContextProps,
+  AppState,
+  CustomDialogContextProps,
+  UserTypeEnum,
+} from "./Structs/State";
 
 import Page404 from "./Pages/Page404";
 import HomePage from "./Pages/HomePage";
@@ -17,6 +22,7 @@ import { Toaster } from "./components/ui/toaster";
 import ProfilePage from "./Pages/ProfilePage";
 import UserProfilePage from "./Pages/UserProfilePage";
 import BlankTestPage from "./Pages/BlankTest";
+import { CustomDialog, CustomDialogProps } from "@/components/CustomDialog";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
@@ -29,9 +35,14 @@ const defaultAppState: AppState = {
 };
 export const APIURLContext = createContext<string | undefined>(undefined);
 
+export const CustomDialogContext = createContext<
+  CustomDialogContextProps | undefined
+>(undefined);
+
 function App() {
   const [AppState, SetAppState] = useState<AppState>(defaultAppState);
   const [APIURL] = useState("https://api.robbiecornock.com");
+  const [DialogQueue, SetDialogQueue] = useState<CustomDialogProps[]>([]);
 
   useEffect(() => {
     UseDarkMode(AppState.useDarkmode);
@@ -40,72 +51,78 @@ function App() {
   useEffect(() => {});
   return (
     <>
-      {/* link preview stuff */}
-
       <AppContext.Provider value={{ AppState, SetAppState }}>
         <APIURLContext.Provider value={APIURL}>
-          <SignoutDialog />
-          <Toaster />
+          <CustomDialogContext.Provider
+            value={{
+              CustomDialogQueue: DialogQueue,
+              SetCustomDialogQueue: SetDialogQueue,
+            }}
+          >
+            <SignoutDialog />
+            <CustomDialog />
+            <Toaster />
 
-          <BrowserRouter>
-            <Routes>
-              <Route path="*" element={<Page404 />} />
-              <Route path="/" element={<HomePage />} />
-              <Route
-                path="Signout"
-                element={
-                  <AuthRoute>
-                    <SignoutPage />
-                  </AuthRoute>
-                }
-              />
-              <Route path="/Leaderboard" element={<Leaderboard />} />
-              <Route path="/Debug" element={<DebugPage />} />
+            <BrowserRouter>
+              <Routes>
+                <Route path="*" element={<Page404 />} />
+                <Route path="/" element={<HomePage />} />
+                <Route
+                  path="Signout"
+                  element={
+                    <AuthRoute>
+                      <SignoutPage />
+                    </AuthRoute>
+                  }
+                />
+                <Route path="/Leaderboard" element={<Leaderboard />} />
+                <Route path="/Debug" element={<DebugPage />} />
 
-              <Route
-                path="/Signin"
-                element={
-                  <SignedOutRoute fallbackPath="/Profile">
-                    <SigninPage />
-                  </SignedOutRoute>
-                }
-              />
-              <Route
-                path="/Signup"
-                element={
-                  <SignedOutRoute fallbackPath="/Signout">
-                    <SignupPage />
-                  </SignedOutRoute>
-                }
-              />
+                <Route
+                  path="/Signin"
+                  element={
+                    <SignedOutRoute fallbackPath="/Profile">
+                      <SigninPage />
+                    </SignedOutRoute>
+                  }
+                />
+                <Route
+                  path="/Signup"
+                  element={
+                    <SignedOutRoute fallbackPath="/Signout">
+                      <SignupPage />
+                    </SignedOutRoute>
+                  }
+                />
 
-              <Route
-                path="/Admin"
-                element={
-                  <AuthRoute
-                    RequiredAuth={UserTypeEnum.Admin}
-                    fallbackPath="/Signin"
-                  >
-                    <AdminPage />
-                  </AuthRoute>
-                }
-              />
+                <Route
+                  path="/Admin"
+                  element={
+                    <AuthRoute
+                      RequiredAuth={UserTypeEnum.Admin}
+                      fallbackPath="/Signin"
+                    >
+                      <AdminPage />
+                    </AuthRoute>
+                  }
+                />
 
-              <Route
-                path="/Profile"
-                element={
-                  <AuthRoute
-                    RequiredAuth={UserTypeEnum.User}
-                    fallbackPath="/Signin"
-                  >
-                    <ProfilePage />
-                  </AuthRoute>
-                }
-              />
-              <Route path="/user/:username" element={<UserProfilePage />} />
-              <Route path="/test" element={<BlankTestPage />} />
-            </Routes>
-          </BrowserRouter>
+                <Route
+                  path="/Profile"
+                  element={
+                    <AuthRoute
+                      RequiredAuth={UserTypeEnum.User}
+                      fallbackPath="/Signin"
+                    >
+                      <ProfilePage />
+                    </AuthRoute>
+                  }
+                />
+                <Route path="/user/:username" element={<UserProfilePage />} />
+                <Route path="/test" element={<BlankTestPage />} />
+              </Routes>
+            </BrowserRouter>
+          </CustomDialogContext.Provider>
         </APIURLContext.Provider>
       </AppContext.Provider>
     </>

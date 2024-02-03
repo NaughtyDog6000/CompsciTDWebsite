@@ -1,4 +1,5 @@
 import { APIURLContext, AppContext } from "@/App";
+import { CustomDialogProps } from "@/components/CustomDialog";
 import { useContext } from "react";
 
 export type AppState = {
@@ -49,3 +50,23 @@ export function useAPIURL(): string {
   }
   return context;
 }
+
+export interface CustomDialogContextProps {
+  CustomDialogQueue: CustomDialogProps[];
+  SetCustomDialogQueue: (state: CustomDialogProps[]) => void;
+}
+
+// export function CreateDialog(
+//   Dialog: CustomDialogProps,
+//   DialogContext: CustomDialogContextProps
+// ) {
+//   const { CustomDialogQueue, SetCustomDialogQueue } = DialogContext;
+
+//   // idk if this will work
+//   console.log(CustomDialogQueue);
+//   CustomDialogQueue.push(Dialog);
+//   console.log(CustomDialogQueue);
+
+//   // HACK
+//   SetCustomDialogQueue(CustomDialogQueue);
+// }
