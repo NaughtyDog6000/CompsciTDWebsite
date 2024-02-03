@@ -3,6 +3,7 @@
 import { CustomDialogContext } from "@/App";
 import { useContext } from "react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContentNoCloser } from "./ui/dialog";
 
 // element that sits on the root app and if there is an elemnet in the content queue,
 // renders the element with the passed on result/return function which once called, calls the callback function
@@ -57,26 +58,52 @@ export function CustomDialog() {
     SetCustomDialogQueue(newQueue);
   }
 
+  // return (
+  //   <div className="dialog">
+  //     {/* passes the content of the dialog the ability to close the dialog  */}
+  //     <div className="dialog-content">
+  //       {CurrentDialog.content({ handleClose })}
+  //     </div>
+
+  //     {/* the X button that every dialog has to force close it should the content
+  //     be messed up/ not close propperly */}
+  //     <Button
+  //       onClick={() =>
+  //         handleClose({
+  //           data: null,
+  //           description: "closed via the X button",
+  //           outcome: DialogOutcomeEnum.ForceClosed,
+  //         })
+  //       }
+  //     >
+  //       X
+  //     </Button>
+  //   </div>
+  // );
+
   return (
     <div className="dialog">
-      {/* passes the content of the dialog the ability to close the dialog  */}
-      <div className="dialog-content">
-        {CurrentDialog.content({ handleClose })}
-      </div>
-
-      {/* the X button that every dialog has to force close it should the content 
-      be messed up/ not close propperly */}
-      <Button
-        onClick={() =>
-          handleClose({
-            data: null,
-            description: "closed via the X button",
-            outcome: DialogOutcomeEnum.ForceClosed,
-          })
-        }
-      >
-        X
-      </Button>
+      {/* override the closing of the element */}
+      <Dialog defaultOpen={true} open={true}>
+        <DialogContentNoCloser>
+          {/* Force Close Button */}
+          <Button
+            onClick={() =>
+              handleClose({
+                data: null,
+                description: "closed via the X button",
+                outcome: DialogOutcomeEnum.ForceClosed,
+              })
+            }
+          >
+            X
+          </Button>
+          {/* Custom Content */}
+          <div className="content">
+            {CurrentDialog.content({ handleClose })}
+          </div>
+        </DialogContentNoCloser>
+      </Dialog>
     </div>
   );
 }

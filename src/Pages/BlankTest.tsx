@@ -23,7 +23,6 @@ export default function BlankTestPage(): JSX.Element {
             content: function (props: {
               handleClose: (response: DialogCloseResponse) => void;
             }): ReactNode {
-              console.log();
               return (
                 <>
                   <p>Dialog Content</p>
