@@ -4,6 +4,7 @@ import {
   DialogCloseResponse,
   DialogOutcomeEnum,
 } from "@/components/CustomDialog";
+import { NavBar } from "@/components/NavBar";
 import { Button } from "@/components/ui/button";
 import { ReactNode, useContext } from "react";
 
@@ -16,6 +17,7 @@ export default function BlankTestPage(): JSX.Element {
 
   return (
     <>
+      <NavBar />
       Test Page!
       <Button
         onClick={() => {

@@ -155,7 +155,7 @@ export default function Leaderboard(): JSX.Element {
           </Button>
         </SheetTrigger>
         <SheetContent>
-          <ScrollArea className="w-auto h-auto">
+          <ScrollArea className="w-auto h-full">
             <SheetHeader>
               <SheetTitle>Leaderboard Settings</SheetTitle>
               <SheetDescription>
@@ -214,7 +214,9 @@ export default function Leaderboard(): JSX.Element {
             </div>
             {/* DatePickers for timeperiod of records allowed */}
             <Separator />
-            <p className="flex justify-center text-lg font-bold">Upload Range</p>
+            <p className="flex justify-center text-lg font-bold">
+              Upload Range
+            </p>
 
             <p>AllTime / Custom Radio Buttons</p>
 

@@ -7,21 +7,21 @@ import {
   UserTypeEnum,
 } from "./Structs/State";
 
-import Page404 from "./Pages/Page404";
+import Page404 from "./Pages/Misc/Page404";
 import HomePage from "./Pages/HomePage";
 import Leaderboard from "./Pages/LeaderboardPage";
-import DebugPage from "./Pages/Debug";
+import DebugPage from "./Pages/Misc/Debug";
 import { UseDarkMode } from "./main";
 import { SignoutDialog } from "./components/Signout";
 import SigninPage from "./Pages/Signin";
 import { AuthRoute, SignedOutRoute } from "./lib/Routes";
 import AdminPage from "./Pages/AdminPages/A_Overview";
-import SignoutPage from "./Pages/SignoutPage";
+import SignoutPage from "./Pages/Misc/SignoutPage";
 import SignupPage from "./Pages/Signup";
 import { Toaster } from "./components/ui/toaster";
-import ProfilePage from "./Pages/ProfilePage";
+import ProfilePage from "./Pages/SignedInExclusive/ProfilePage";
 import UserProfilePage from "./Pages/UserProfilePage";
-import BlankTestPage from "./Pages/BlankTest";
+import BlankTestPage from "./Pages/Misc/BlankTest";
 import { CustomDialog, CustomDialogProps } from "@/components/CustomDialog";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
