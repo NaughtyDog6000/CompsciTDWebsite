@@ -1,9 +1,9 @@
-import { APIURLContext, AppContext } from "@/App";
+import { APIContext, AppContext } from "@/App";
 import { CustomDialogProps } from "@/components/CustomDialog";
 import { useContext } from "react";
+import { CompsciAPI } from "@/lib/APICALLS";
 
 export type AppState = {
-  token: string | null;
   username: string | null;
   userType: UserTypeEnum;
   DebugMode: boolean;
@@ -12,7 +12,6 @@ export type AppState = {
 };
 
 export const DefaultAppState: AppState = {
-  token: null,
   username: null,
   userType: UserTypeEnum.SignedOut,
   DebugMode: false,
@@ -41,11 +40,11 @@ export function useAppState(): AppContextProps {
   return context;
 }
 
-export function useAPIURL(): string {
-  const context = useContext(APIURLContext);
+export function useAPI(): CompsciAPI {
+  const context = useContext(APIContext);
   if (!context) {
     throw new Error(
-      "the APIURL context was not provided, APIURL can only be used where it is provided"
+      "the API context was not provided, API can only be used where it is provided"
     );
   }
   return context;

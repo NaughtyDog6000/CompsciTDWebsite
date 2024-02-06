@@ -6,42 +6,45 @@ import {
   CustomDialogContextProps,
   UserTypeEnum,
 } from "./Structs/State";
+import { UseDarkMode } from "./main";
+import { SignoutDialog } from "./components/Signout";
+import { AuthRoute, SignedOutRoute } from "./lib/Routes";
+import { Toaster } from "./components/ui/toaster";
+import { CustomDialog, CustomDialogProps } from "@/components/CustomDialog";
+import { CompsciAPI } from "@/lib/APICALLS";
 
 import Page404 from "./Pages/Misc/Page404";
 import HomePage from "./Pages/HomePage";
 import Leaderboard from "./Pages/LeaderboardPage";
 import DebugPage from "./Pages/Misc/Debug";
-import { UseDarkMode } from "./main";
-import { SignoutDialog } from "./components/Signout";
 import SigninPage from "./Pages/Signin";
-import { AuthRoute, SignedOutRoute } from "./lib/Routes";
 import AdminPage from "./Pages/AdminPages/A_Overview";
 import SignoutPage from "./Pages/Misc/SignoutPage";
 import SignupPage from "./Pages/Signup";
-import { Toaster } from "./components/ui/toaster";
 import ProfilePage from "./Pages/SignedInExclusive/ProfilePage";
 import UserProfilePage from "./Pages/UserProfilePage";
 import BlankTestPage from "./Pages/Misc/BlankTest";
-import { CustomDialog, CustomDialogProps } from "@/components/CustomDialog";
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const defaultAppState: AppState = {
-  token: null,
-  DebugMode: false,
+  DebugMode: true,
   username: null,
   userType: UserTypeEnum.SignedOut,
   useDarkmode: true,
   SignoutDialogOpen: false,
 };
-export const APIURLContext = createContext<string | undefined>(undefined);
-
+export const APIContext = createContext<CompsciAPI | undefined>(undefined);
+const defaultAPIstate: CompsciAPI = new CompsciAPI(
+  null,
+  "https://api.robbiecornock.com"
+);
 export const CustomDialogContext = createContext<
   CustomDialogContextProps | undefined
 >(undefined);
 
 function App() {
   const [AppState, SetAppState] = useState<AppState>(defaultAppState);
-  const [APIURL] = useState("https://api.robbiecornock.com");
+  const [API] = useState<CompsciAPI>(defaultAPIstate);
   const [DialogQueue, SetDialogQueue] = useState<CustomDialogProps[]>([]);
 
   useEffect(() => {
@@ -52,7 +55,7 @@ function App() {
   return (
     <>
       <AppContext.Provider value={{ AppState, SetAppState }}>
-        <APIURLContext.Provider value={APIURL}>
+        <APIContext.Provider value={API}>
           <CustomDialogContext.Provider
             value={{
               CustomDialogQueue: DialogQueue,
@@ -123,7 +126,7 @@ function App() {
               </Routes>
             </BrowserRouter>
           </CustomDialogContext.Provider>
-        </APIURLContext.Provider>
+        </APIContext.Provider>
       </AppContext.Provider>
     </>
   );

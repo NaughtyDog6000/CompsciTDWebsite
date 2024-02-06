@@ -1,4 +1,4 @@
-import { UserTypeEnum, useAPIURL, useAppState } from "@/Structs/State";
+import { UserTypeEnum, useAPI, useAppState } from "@/Structs/State";
 import { NavBar } from "@/components/NavBar";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
@@ -22,9 +22,8 @@ import z from "zod";
 
 export function SigninForm({ className }: { className?: string }): JSX.Element {
   const { AppState, SetAppState } = useAppState();
-  const APIURL = useAPIURL();
+  const API = useAPI();
   const { toast } = useToast();
-
   const SigninFormSchema = z.object({
     username: z
       .string()
@@ -50,24 +49,17 @@ export function SigninForm({ className }: { className?: string }): JSX.Element {
     headers.append("Content-Type", "application/json; charset=UTF-8");
 
     // send the username and password to the signin api Route
-    const response = await fetch(APIURL + "/signin", {
-      method: "POST",
-      headers: headers,
-      mode: "cors",
-      body: JSON.stringify(values),
-    });
+    const success = API.Signin(values.username, values.password);
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Failed To Signup: ", error);
+    if (!success) {
+      console.error("Failed To Signin");
       toast({
         title: "ERROR",
-        description: `an error occured: ${error.response}`,
+        description: `an error occured: falied to signin`,
       });
       return;
     }
 
-    const json = await response.json();
     toast({
       title: "Signin Success!",
       description: "you successfully signed in :)",
@@ -75,7 +67,6 @@ export function SigninForm({ className }: { className?: string }): JSX.Element {
 
     SetAppState({
       ...AppState,
-      token: json.token,
       userType: UserTypeEnum.Admin,
     });
     // SetAppState({ ...AppState, userType: UserTypeEnum.User });

@@ -51,7 +51,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { columns } from "@/components/Leaderboard/LColumns";
 import L_Table from "@/components/Leaderboard/LTable";
-import { useAPIURL, useAppState } from "@/Structs/State";
+import { useAPI } from "@/Structs/State";
 import { toast } from "@/components/ui/use-toast";
 
 const DefaultLeaderboardSettings: LeaderboardSettingsType = {
@@ -69,8 +69,7 @@ export default function Leaderboard(): JSX.Element {
   const [controlPanelEnabled, setControlPanelEnabled] = useState(false);
   const [leaderboardSettings, SetLeaderboardSettings] =
     useState<LeaderboardSettingsType>(DefaultLeaderboardSettings);
-  const APIURL = useAPIURL();
-  const { AppState } = useAppState();
+  const API = useAPI();
 
   const [PageData, SetPageData] = useState<PageData>(DefaultPageData);
 
@@ -79,7 +78,7 @@ export default function Leaderboard(): JSX.Element {
   ) {
     // if the user is not signed in, currently they cannot access the Leaderboard
     // TODO!() allow non signed in usage
-    if (AppState.token === null) {
+    if (API.token === null) {
       console.warn("cannot update without token");
       toast({
         title: "ERROR",
@@ -105,11 +104,11 @@ export default function Leaderboard(): JSX.Element {
     // create the appropriate headers including the user's auth token
     const headers = new Headers();
     headers.append("Content-Type", "application/json; charset=UTF-8");
-    headers.append("auth", AppState.token);
+    headers.append("auth", API.token);
 
     // fetch leaderboard data from the API
-    console.log(APIURL + "/leaderboard/scores");
-    const response = await fetch(APIURL + "/leaderboard/scores", {
+    console.log(API.URL + "/leaderboard/scores");
+    const response = await fetch(API.URL + "/leaderboard/scores", {
       method: "POST",
       headers: headers,
       mode: "cors",
